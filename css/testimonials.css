@@ -1,7 +1,6 @@
 .testimonials {
     background-color: rgba(243, 248, 254, 1);
-    padding-top: 200px;
-    padding-bottom: 140px;
+    padding: 80px 20px 80px;
 }
 
 .testimonials .container {
@@ -14,7 +13,14 @@
     padding: 50px 20px;
     border-radius: 20px;
     max-width: 1120px;
-    margin: -80px auto 0;
+}
+
+.testimonials__inner {
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
 }
 
 .testimonials__title {
@@ -36,22 +42,16 @@
     margin: 20px auto 0 auto;
 }
 
-.testimonials__inner {
-    color: #fff;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 30px;
-}
-
 .info {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 160px;
+    gap: clamp(1px, 8vw, 160px);
     flex-wrap: wrap;
     text-align: left;
 }
+
+
 
 .info-customer {
     display: flex;
@@ -99,3 +99,4 @@
     padding-bottom: 20px;
     text-align: center;
 }
+

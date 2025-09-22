@@ -2,14 +2,14 @@
     background: linear-gradient(to right, rgba(90, 152, 242, 1), rgba(103, 195, 243, 1));
     color: #fff;
     padding: 60px 20px 30px 20px;
-
 }
 
 .footer__inner {
     display: flex;
     align-items: center;
     flex-wrap: wrap;
-    gap: 10px;
+    justify-content: space-between;
+    gap: 50px;
 }
 
 .footer-logo {
@@ -17,7 +17,7 @@
     flex-direction: column;
     justify-content: center;
     text-align: center;
-    margin-right: 200px;
+    margin-right: clamp(10px, 5vw, 200px);
     gap: 8px;
 }
 
@@ -31,9 +31,8 @@
     display: flex;
     justify-content: space-between;
     flex: 1;
-    gap: 90px;
+    gap: 50px;
     align-items: flex-start;
-    margin-right: 100px;
 }
 
 .footer-column h4 {
@@ -71,7 +70,6 @@
     margin-top: 40px;
     font-size: 14px;
     color: rgba(255, 255, 255, 0.5);
-
 }
 
 .links {

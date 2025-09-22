@@ -1,0 +1,35 @@
+@media (max-width: 405px) {
+
+    .testimonials .container {
+        padding: 30px 10px;
+        max-width: 95%;
+    }
+
+    .info {
+        gap: 20px;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .customer-image {
+        width: 80px;
+        height: 80px;
+    }
+
+    .customer-name {
+        font-size: 16px;
+    }
+
+    .customer-paragraph {
+        font-size: 14px;
+        max-width: 100%;
+        text-align: center;
+    }
+}
+@media (max-width: 380px) {
+    .bottom-dots img{
+        width: 80%;
+        height: auto;
+    }
+
+}

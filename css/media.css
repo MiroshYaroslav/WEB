@@ -1,0 +1,42 @@
+@import "media/header_adaptive.css";
+
+@import "media/hero_adaptive.css";
+
+@import "media/intro_adaptive.css";
+
+@import "media/testimonials_adaptive.css";
+
+@import "media/footer_adaptive.css";
+
+@media (max-width: 405px) {
+
+    .hero__title,
+    .intro__title,
+    .testimonials__title{
+        font-size: 22px;
+        line-height: 1.1;
+        margin-bottom: 20px;
+    }
+
+    .hero__paragraph,
+    .intro__paragraph,
+    .card__paragraph,
+    .customer-paragraph {
+        font-size: 14px;
+        line-height: 1.5;
+        margin-bottom: 15px;
+    }
+
+    .customer-name,
+    .card__title {
+        font-size: 16px;
+        line-height: 1.4;
+    }
+
+    .card__link,
+    .footer-bottom {
+        font-size: 13px;
+    }
+
+}
+

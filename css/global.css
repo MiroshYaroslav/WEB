@@ -1,21 +1,32 @@
+* {
+    box-sizing: border-box;
+}
+
 body {
     background: #fff;
     font-family: "Mulish", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    color: #1f1534;
+}
+
+html, body {
+    overflow-x: hidden;
     margin: 0;
     padding: 0;
-    color: #FFFFFF;
 }
 
 a {
     text-decoration: none;
+    transition: opacity 0.3s;
 }
 
 a:hover {
-    opacity: 1;
+    opacity: 0.8;
 }
 
 ul, ol {
     list-style: none;
+    padding: 0;
+    margin: 0;
 }
 
 li {
@@ -29,6 +40,7 @@ p {
 .container {
     max-width: 1250px;
     margin: 0 auto;
+    padding: 0 16px;
 }
 
 .default-link {
@@ -36,13 +48,16 @@ p {
     color: rgba(69, 143, 246, 1);
     background: #FFF;
     border-radius: 50px;
-    padding: 13px 55px;
+    padding: 12px 40px;
     cursor: pointer;
     font-weight: 600;
     font-size: 16px;
     transition: all 0.3s;
+    display: inline-block;
+    text-align: center;
 }
 
 .default-link:hover {
     background: rgba(69, 143, 246, 0.1);
 }
+
