@@ -1,0 +1,12 @@
+[
+  { "id": 1, "brand": "BMW", "power": 150, "maxSpeed": 220 , "color": "red", "year": 2020, "price": 30000},
+  { "id": 2, "brand": "Audi", "power": 170, "maxSpeed": 240 , "color": "blue", "year": 2019, "price": 35000},
+  { "id": 3, "brand": "Tesla", "power": 250, "maxSpeed": 260, "color": "white", "year": 2021, "price": 50000},
+  { "id": 4, "brand": "Mercedes", "power": 200, "maxSpeed": 230, "color": "black", "year": 2018, "price": 40000},
+  { "id": 5, "brand": "Toyota", "power": 130, "maxSpeed": 210 , "color": "green", "year": 2022, "price": 25000},
+  { "id": 6, "brand": "Honda", "power": 140, "maxSpeed": 215 , "color": "yellow", "year": 2020, "price": 27000},
+  { "id": 7, "brand": "Ford", "power": 160, "maxSpeed": 225 , "color": "orange", "year": 2019, "price": 32000},
+  { "id": 8, "brand": "Chevrolet", "power": 180, "maxSpeed": 235 , "color": "purple", "year": 2021, "price": 38000},
+  { "id": 9, "brand": "Nissan", "power": 155, "maxSpeed": 222 , "color": "pink", "year": 2018, "price": 29000},
+  { "id": 10, "brand": "Volkswagen", "power": 165, "maxSpeed": 228 , "color": "brown", "year": 2022, "price": 31000}
+]

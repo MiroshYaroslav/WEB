@@ -1,0 +1,8 @@
+[
+  {"value": "price-asc", "text": "Price ↑"},
+  {"value": "price-desc", "text": "Price ↓"},
+  {"value": "year-asc", "text": "Year ↑"},
+  {"value": "year-desc", "text": "Year ↓"},
+  {"value": "power-asc", "text": "Power ↑"},
+  {"value": "power-desc", "text": "Power ↓"}
+]

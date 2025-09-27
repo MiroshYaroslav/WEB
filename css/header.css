@@ -1,0 +1,73 @@
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 20px;
+    background-color: #333;
+    color: white;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+header h1 {
+    font-size: 20px;
+}
+
+.head-buttons {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+header button {
+    padding: 6px 12px;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    border-radius: 8px;
+    background-color: #555;
+    color: white;
+    transition: background-color 0.2s;
+}
+
+header button:hover {
+    background-color: #777;
+}
+
+#catalog-btn i {
+    margin-right: 8px;
+}
+
+#catalog-btn i {
+    margin-right: 8px;
+}
+
+.search-container {
+    display: flex;
+    flex: 1;
+    max-width: 500px;
+    width: 100%;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid #555;
+    margin: 5px 0;
+}
+
+.search-container input {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    outline: none;
+    font-size: 16px;
+}
+
+.search-container button {
+    padding: 0 16px;
+    border: none;
+    background-color: #555;
+    color: white;
+}
+
+.search-container button:hover {
+    background-color: #777;
+}

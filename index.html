@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="css/main.css">
+    <title>Cars</title>
+</head>
+<body>
+
+<header>
+    <div class="head-buttons left">
+        <button id="catalog-btn"><i class="fa-solid fa-bars"></i> Catalog</button>
+    </div>
+
+    <div class="search-container">
+        <input type="text" id="search" placeholder="Search...">
+        <button id="search-btn"><i class="fa-solid fa-magnifying-glass"></i></button>
+    </div>
+
+    <div class="head-buttons right">
+        <button id="login-btn"><i class="fa-solid fa-user"></i></button>
+        <a href="tools/favorites.html"><button id="favorites-btn"><i class="fa-solid fa-heart"></i></button></a>
+        <a href="tools/cart.html"><button id="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button></a>
+    </div>
+</header>
+
+<main>
+    <div class="title"><h1>Our list cars</h1></div>
+
+    <div class="controls">
+        <select id="sort-select">
+            <option value="">Sort...</option>
+        </select>
+
+        <select id="filter-select">
+            <option value="">Filter by brand...</option>
+        </select>
+    </div>
+
+    <div id="list"></div>
+    <p id="total"></p>
+</main>
+
+<script type="module" src="js/main.js"></script>
+</body>
+</html>
