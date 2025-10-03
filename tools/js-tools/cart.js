@@ -7,7 +7,7 @@ function renderCart() {
         .then(res => res.json())
         .then(cars => {
             const cartCars = cars.filter(car => cartIds.includes(car.id));
-            displayCars(cartCars, false); // без кнопок
+            displayCars(cartCars, false);
 
             const totalPrice = cartCars.reduce((acc, car) => acc + car.price, 0);
             document.getElementById('total').textContent = `Total Price: $${totalPrice}`;
