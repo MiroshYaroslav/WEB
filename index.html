@@ -4,13 +4,14 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="tools/style/login.css">
     <title>Cars</title>
 </head>
 <body>
 
 <header>
     <div class="head-buttons left">
-        <button id="catalog-btn"><i class="fa-solid fa-bars"></i> Catalog</button>
+        <button id="catalog-btn"><i class="fa-solid fa-bars"></i></button>
     </div>
 
     <div class="search-container">
@@ -23,6 +24,7 @@
         <a href="tools/favorites.html"><button id="favorites-btn"><i class="fa-solid fa-heart"></i></button></a>
         <a href="tools/cart.html"><button id="cart-btn"><i class="fa-solid fa-cart-shopping"></i></button></a>
     </div>
+
 </header>
 
 <main>
@@ -42,6 +44,54 @@
     <p id="total"></p>
 </main>
 
+<div id="loginModal" class="modal">
+    <div class="modal-content">
+        <span id="closeModal" class="close">&times;</span>
+        <h2>Admin Login</h2>
+        <input type="password" id="adminPass" placeholder="Enter password">
+        <button class= 'modal-button' id="submitPass">Login</button>
+    </div>
+</div>
+
+<div id="addCarModal" class="modal">
+    <div class="modal-content">
+        <span class="close add-close">&times;</span>
+        <h2>Add Car</h2>
+        <input type="text" id="carBrand" placeholder="Brand">
+        <input type="number" id="carYear" placeholder="Year">
+        <input type="number" id="carPower" placeholder="Power (hp)">
+        <input type="number" id="carPrice" placeholder="Price">
+        <input type="text" id="carColor" placeholder="Color">
+        <button class= 'modal-button' id="saveCarBtn">Save</button>
+    </div>
+</div>
+
+<div id="editCarModal" class="modal">
+    <div class="modal-content">
+        <span class="close edit-close">&times;</span>
+        <h2>Edit Car</h2>
+        <input type="number" id="editCarId" placeholder="Car ID">
+        <input type="text" id="editCarBrand" placeholder="New Brand">
+        <input type="number" id="editCarYear" placeholder="New Year">
+        <input type="number" id="editCarPower" placeholder="New Power">
+        <input type="number" id="editCarPrice" placeholder="New Price">
+        <input type="text" id="editCarColor" placeholder="New Color">
+        <button class= 'modal-button' id="updateCarBtn">Update</button>
+    </div>
+</div>
+
+<div id="deleteCarModal" class="modal">
+    <div class="modal-content">
+        <span class="close delete-close">&times;</span>
+        <h2>Delete Car</h2>
+        <input type="number" id="deleteCarId" placeholder="Enter car ID" />
+        <button class= 'modal-button' id="deleteBtn">Delete</button>
+    </div>
+</div>
+
 <script type="module" src="js/main.js"></script>
+<script type="module" src="tools/js-tools/admin.js"></script>
+<script type="module" src="tools/js-tools/add.js"></script>
+
 </body>
 </html>
