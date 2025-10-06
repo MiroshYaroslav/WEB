@@ -5,20 +5,26 @@ import { filterBySearch } from "./search.js";
 
 let cars = [];
 
-fetch('data/cars.json')
-    .then(res => res.json())
-    .then(data => {
-        cars = data;
+const API_URL = "http://127.0.0.1:8000/api/cars";
+
+export async function fetchCars() {
+    try {
+        const res = await fetch(API_URL);
+        cars = await res.json();
         populateFilterOptions(cars);
         populateSortOptions();
         updateCarList();
-    })
-    .catch(err => console.error('Error fetching car data:', err));
+    } catch (err) {
+        console.error("Error fetching cars:", err);
+    }
+}
 
 export function updateCarList() {
     let result = [...cars];
     result = filterBySearch(result);
     result = filterByBrand(result);
     result = sortCars(result);
-    displayCars(result);
+    displayCars(result, true, false);
 }
+
+fetchCars().then(r => {});

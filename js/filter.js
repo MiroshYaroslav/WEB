@@ -1,4 +1,4 @@
-import {updateCarList} from "./main.js";
+import { updateCarList } from "./main.js";
 
 const filterSelect = document.getElementById('filter-select');
 
@@ -10,6 +10,7 @@ export function filterByBrand(data) {
 
 export function populateFilterOptions(cars) {
     if (!filterSelect) return;
+    filterSelect.innerHTML = '<option value="">Filter by brand...</option>';
     const brands = [...new Set(cars.map(car => car.brand))];
     brands.forEach(brand => {
         const option = document.createElement('option');

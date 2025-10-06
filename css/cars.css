@@ -92,6 +92,16 @@ main {
     justify-content: center;
 }
 
+.delete-btn {
+    background-color: #ffc107;
+    color: white;
+    margin-right: 6px;
+}
+
+.delete-btn:hover {
+    background-color: #e0a800;
+}
+
 .buy-btn {
     background-color: #28a745;
     color: white;
