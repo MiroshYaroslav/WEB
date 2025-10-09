@@ -4,7 +4,7 @@ const searchInput = document.getElementById('search');
 
 export function filterBySearch(data) {
     const query = searchInput.value.trim().toLowerCase();
-    if (!query) return data;
+    if(!query) return data;
     return data.filter(car =>
         (car.brand || '').toLowerCase().includes(query) ||
         (car.year || '').toString().includes(query) ||
@@ -14,6 +14,6 @@ export function filterBySearch(data) {
     );
 }
 
-if (searchInput) {
+if(searchInput){
     searchInput.addEventListener('input', updateCarList);
 }

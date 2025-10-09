@@ -78,41 +78,60 @@ main {
 
 .car-item .buttons {
     display: flex;
-    justify-content: space-between;
+    gap: 6px;
     margin-top: 10px;
 }
 
 .car-item button {
-    flex: 1;
+    flex: 1; /* однакова ширина */
     padding: 8px 0;
     font-size: 14px;
     border-radius: 6px;
     display: flex;
     align-items: center;
     justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.2s;
 }
 
 .buy-btn {
     background-color: #28a745;
     color: white;
-    margin-right: 6px;
 }
-
 .buy-btn:hover {
     background-color: #218838;
 }
 
 .like-btn {
-    background-color: #dc3545;
+    background-color: #ff6b6b; /* світло-червоний для Like */
     color: white;
 }
-
 .like-btn:hover {
-    background-color: #c82333;
+    background-color: #ff4c4c;
 }
 
+.delete-btn {
+    background-color: #c82333; /* насичений червоний для Delete */
+    color: white;
+}
+.delete-btn:hover {
+    background-color: #a71d2a;
+}
+
+
+.edit-btn {
+    background-color: #ffc107; /* жовтий для Edit */
+    color: white;
+}
+.edit-btn:hover {
+    background-color: #e0a800; /* темніший жовтий при наведенні */
+}
+
+
+/* Іконки або текст всередині кнопок */
 .car-item button i {
-    margin-right: 6px;
+    margin: 0;
+    font-style: normal; /* щоб текст Edit/Delete був нормальний, а не курсив */
 }
 
 .clear-favorites,
@@ -141,3 +160,4 @@ main {
     font-weight: bold;
     margin-bottom: 15px;
 }
+
