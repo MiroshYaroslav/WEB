@@ -47,11 +47,21 @@
 <div id="loginModal" class="modal">
     <div class="modal-content">
         <span id="closeModal" class="close">&times;</span>
-        <h2>Admin Login</h2>
-        <input type="password" id="adminPass" placeholder="Enter password">
-        <button class= 'modal-button' id="submitPass">Login</button>
+        <h2 id="modalTitle">Login</h2>
+
+        <input type="text" id="username" placeholder="Username">
+        <input type="password" id="password" placeholder="Password">
+        <input type="password" id="adminPass" placeholder="Admin code (optional)">
+
+        <div class="switch-buttons">
+            <button id="showLogin">Login</button>
+            <button id="showRegister">Register</button>
+        </div>
+
+        <button class="modal-button" id="submitPass">Login</button>
     </div>
 </div>
+
 
 <div id="addCarModal" class="modal">
     <div class="modal-content">
@@ -91,7 +101,6 @@
 
 <script type="module" src="js/main.js"></script>
 <script type="module" src="tools/js-tools/auth.js"></script>
-<script type="module" src="tools/js-tools/add.js"></script>
 
 </body>
 </html>

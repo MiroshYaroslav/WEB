@@ -1,13 +1,23 @@
 import { displayCars } from "../../js/display.js";
 
-const CART_API = 'http://127.0.0.1:8000/api/cart';
+const API_URL = 'http://127.0.0.1:8000/api';
 
 async function fetchCart() {
+    const user = window.user || JSON.parse(localStorage.getItem("user"));
+    const user_id = user?.id;
+
+    if (!user_id) {
+        document.getElementById('list').innerHTML = '<p>Please log in to view your cart.</p>';
+        document.getElementById('total').textContent = '';
+        return;
+    }
+
     try {
-        const res = await fetch(CART_API);
+        const res = await fetch(`${API_URL}/cart/${user_id}`);
+        if (!res.ok) throw new Error("Failed to load cart");
         const cartCars = await res.json();
 
-        displayCars(cartCars, false, true);
+        await displayCars(cartCars, false, true);
 
         const totalPrice = cartCars.reduce((acc, car) => acc + car.price, 0);
         document.getElementById('total').textContent = `Total Price: $${totalPrice}`;
@@ -17,29 +27,27 @@ async function fetchCart() {
 }
 
 document.getElementById("clear-cart").addEventListener("click", async () => {
+    const user = window.user || JSON.parse(localStorage.getItem("user"));
+    const user_id = user?.id;
+    if (!user_id) {
+        alert("Please log in first.");
+        return;
+    }
+
+    if (!confirm("Clear all items from your cart?")) return;
+
     try {
-        await fetch(CART_API, { method: 'DELETE' });
+        const res = await fetch(`${API_URL}/cart/${user_id}`, { method: 'DELETE' });
+        if (!res.ok) {
+            const err = await res.json().catch(() => ({}));
+            throw new Error(err.detail || "Failed to clear cart");
+        }
         await fetchCart();
+        alert("Cart cleared");
     } catch (err) {
         console.error(err);
+        alert(err.message);
     }
 });
 
-document.addEventListener("click", async (e) => {
-    if (e.target.classList.contains("remove-cart-btn")) {
-        const id = e.target.dataset.id;
-
-        if (!confirm("Видалити авто з кошика?")) return;
-
-        try {
-            const res = await fetch(`${CART_API}/${id}`, { method: "DELETE" });
-            if (!res.ok) throw new Error("Не вдалося видалити авто з кошика");
-            await fetchCart();
-        } catch (err) {
-            console.error("Error removing car from cart:", err);
-        }
-    }
-});
-
-fetchCart().then(() => {});
-
+await fetchCart();

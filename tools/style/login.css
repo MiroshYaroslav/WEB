@@ -7,7 +7,9 @@
     justify-content: center; align-items: center;
     z-index: 2000;
 }
+
 .modal.show { display: flex; }
+
 .modal-content {
     position: relative;
     background: white;
@@ -16,6 +18,7 @@
     width: 300px;
     text-align: center;
 }
+
 .modal-content input {
     width: 90%;
     margin: 5px 0;
@@ -37,4 +40,56 @@
     border: none;
     border-radius: 5px;
     cursor: pointer;
+}
+
+.switch-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin: 15px 0;
+}
+
+.switch-buttons button {
+    padding: 5px 15px;
+    border: 2px solid #007bff;
+    border-radius: 5px;
+    background-color: #fff;
+    color: #007bff;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.switch-buttons button:hover {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.switch-buttons button.active {
+    background-color: #007bff;
+    color: #fff;
+}
+
+.switch-buttons button:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.3);
+}
+
+#loginModal input {
+    display: block;
+    width: 100%;
+    padding: 8px 10px;
+    margin: 8px 0;
+    border: 1.5px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+#loginModal input:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+#adminPass {
+    margin-top: 8px;
 }
