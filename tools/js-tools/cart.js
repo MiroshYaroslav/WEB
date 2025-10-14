@@ -4,7 +4,7 @@ const API_URL = 'https://carstorebackend-jaco.onrender.com/api';
 
 async function fetchCart() {
     const user = window.user || JSON.parse(localStorage.getItem("user"));
-    const user_id = user?.id;
+    const user_id = user?.user_id;
 
     if (!user_id) {
         document.getElementById('list').innerHTML = '<p>Please log in to view your cart.</p>';
