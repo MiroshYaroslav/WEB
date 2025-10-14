@@ -33,7 +33,6 @@ function closeModal(modal) {
     }
 }
 
-// Click outside / close buttons
 [loginModal, addCarModal, editCarModal, deleteCarModal].forEach(modal => {
     modal.addEventListener("click", e => {
         if (e.target === modal) closeModal(modal);
@@ -88,7 +87,7 @@ submitBtn.onclick = async () => {
         return alert(err.message);
     }
 
-    const url = isRegisterMode ? "http://127.0.0.1:8000/api/register" : "http://127.0.0.1:8000/api/login";
+    const url = isRegisterMode ? "https://carstorebackend-jaco.onrender.com/api/register" : "https://carstorebackend-jaco.onrender.com/api/login";
     const body = isRegisterMode ? {username, password, admin_code: adminCode || undefined} : {username, password};
 
     try {
