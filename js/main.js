@@ -1,6 +1,6 @@
 import { displayCars } from "./display.js";
 
-const API_URL = "http://127.0.0.1:8000/api/cars";
+const API_URL = "https://carstorebackend-jaco.onrender.com/api/cars";
 const SORT_OPTIONS_URL = "data/sort_options.json";
 
 const filterSelect = document.getElementById("filter-select");

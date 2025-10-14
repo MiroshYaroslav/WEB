@@ -1,6 +1,6 @@
 import { displayCars } from "../../js/display.js";
 
-const API_URL = 'http://127.0.0.1:8000/api';
+const API_URL = 'https://carstorebackend-jaco.onrender.com/api';
 
 async function fetchFavorites() {
     const user = window.user || JSON.parse(localStorage.getItem("user"));

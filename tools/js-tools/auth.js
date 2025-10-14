@@ -15,7 +15,7 @@ const addCarModal = document.getElementById("addCarModal");
 const editCarModal = document.getElementById("editCarModal");
 const deleteCarModal = document.getElementById("deleteCarModal");
 
-const API_URL = "http://127.0.0.1:8000/api/cars";
+const API_URL = "https://carstorebackend-jaco.onrender.com/api/cars";
 
 let isRegisterMode = false;
 window.user = JSON.parse(localStorage.getItem("user")) || null;
