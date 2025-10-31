@@ -1,0 +1,57 @@
+.header {
+  width: 100%;
+  background-color: #1a1a1a;
+  color: #fff;
+  padding: 1rem 0;
+}
+
+.header-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.logo {
+  height: 60px;
+  cursor: pointer;
+  transition: filter 0.3s;
+}
+
+.logo img {
+  height: 60px;
+  width: auto;
+}
+
+/* Ефект при наведенні — лише підсвітка */
+.logo:hover {
+  filter: drop-shadow(0 0 1rem #646cffaa);
+}
+
+/* Клас, який запускає анімацію повороту */
+.spin-once {
+  animation: spin 0.7s linear;
+  filter: drop-shadow(0 0 1rem #646cffaa);
+}
+
+/* Навігація */
+.nav a {
+  margin-left: 1.5rem;
+  color: #fff;
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.nav a:hover {
+  color: #646cff;
+}
+
+/* Анімація */
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

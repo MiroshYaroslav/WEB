@@ -1,0 +1,37 @@
+[
+  {
+    "id": 1,
+    "name": "BMW M8",
+    "price": 199,
+    "power": 510,
+    "image": "/image-car/img.png"
+  },
+  {
+    "id": 2,
+    "name": "BMW X6 M",
+    "price": 89,
+    "power": 625,
+    "image": "/image-car/bmw-x6-m.png"
+  },
+  {
+    "id": 3,
+    "name": "BMW M3",
+    "price": 129,
+    "power": 530,
+    "image": "/image-car/bmw-m-3.png"
+  },
+  {
+    "id": 4,
+    "name": "BMW M4",
+    "price": 551,
+    "power": 550,
+    "image": "/image-car/img_2.png"
+  },
+  {
+    "id": 5,
+    "name": "BMW M5",
+    "price": 399,
+    "power": 600,
+    "image": "/image-car/bmw-m5.png"
+  }
+]
