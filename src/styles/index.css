@@ -43,7 +43,6 @@ body,
   min-height: 100vh;
 }
 
-/* Основна частина (контент між Header і Footer) */
 main {
   flex: 1;
   display: flex;

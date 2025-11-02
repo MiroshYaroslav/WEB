@@ -22,5 +22,37 @@
     "power": 619,
     "category": "Electric",
     "image": "/image-car/bmw-ix.png"
+  },
+  {
+    "id": 11,
+    "name": "BMW iX1 xDrive30",
+    "price": 60,
+    "power": 313,
+    "category": "Electric",
+    "image": "/image-car/bmw-ix1.png"
+  },
+  {
+    "id": 12,
+    "name": "BMW i5 M60 xDrive",
+    "price": 85,
+    "power": 601,
+    "category": "Electric",
+    "image": "/image-car/bmw-i5.png"
+  },
+  {
+    "id": 13,
+    "name": "BMW iX2 xDrive30",
+    "price": 58,
+    "power": 313,
+    "category": "Electric",
+    "image": "/image-car/bmw-ix2.png"
+  },
+  {
+    "id": 14,
+    "name": "BMW i Vision Dee",
+    "price": 120,
+    "power": 670,
+    "category": "Electric",
+    "image": "/image-car/bmw-i-vision-dee.png"
   }
 ]

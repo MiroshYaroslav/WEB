@@ -8,7 +8,6 @@ const NavMenu = () => {
   const dropdownRef = useRef(null);
   const categories = getCategories();
 
-  // Закриття меню при кліку поза ним
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
@@ -29,27 +28,24 @@ const NavMenu = () => {
 
       <div className="catalog-dropdown">
         <i
-          className="nav-link catalog-btn"
+          className={`nav-link catalog-btn ${showDropdown ? "active" : ""}`}
           onClick={toggleDropdown}
-          style={{ fontStyle: "normal" }}
         >
           Catalog
         </i>
 
-        {showDropdown && (
-          <div className="dropdown-menu">
-            {categories.map((cat) => (
-              <Link
-                key={cat.slug}
-                to={`/catalog/${cat.slug}`}
-                className="dropdown-item"
-                onClick={() => setShowDropdown(false)}
-              >
-                {cat.name}
-              </Link>
-            ))}
-          </div>
-        )}
+        <div className={`dropdown-menu ${showDropdown ? "active" : ""}`}>
+          {categories.map((cat) => (
+            <Link
+              key={cat.slug}
+              to={`/catalog/${cat.slug}`}
+              className="dropdown-item"
+              onClick={() => setShowDropdown(false)}
+            >
+              {cat.name}
+            </Link>
+          ))}
+        </div>
       </div>
 
       <Link to="/cart" className="nav-link">

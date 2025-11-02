@@ -16,7 +16,6 @@
   flex-wrap: wrap;
 }
 
-/* ---------------- LOGO ---------------- */
 .logo {
   height: 60px;
   cursor: pointer;
@@ -33,7 +32,7 @@
 }
 
 .spin-once {
-  animation: spin 0.7s linear;
+  animation: spin 0.6s linear;
   filter: drop-shadow(0 0 1rem var(--color-accent-hover));
 }
 
@@ -46,7 +45,6 @@
   }
 }
 
-/* ---------------- NAVIGATION ---------------- */
 .nav {
   display: flex;
   align-items: center;
@@ -74,7 +72,6 @@
   color: var(--color-accent);
 }
 
-/* ---------------- LIGHT THEME SUPPORT ---------------- */
 @media (prefers-color-scheme: light) {
   .header {
     background-color: var(--color-bg-light);

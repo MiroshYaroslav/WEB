@@ -5,17 +5,18 @@ import NavMenu from "../NavMenu/NavMenu";
 import "./Header.css";
 
 const Header = () => {
+  const SPIN_DURATION = 600;
   const [isSpinning, setIsSpinning] = useState(true);
 
   useEffect(() => {
-    const timer = setTimeout(() => setIsSpinning(false), 700);
+    const timer = setTimeout(() => setIsSpinning(false), SPIN_DURATION);
     return () => clearTimeout(timer);
   }, []);
 
   const handleHover = () => {
     if (isSpinning) return;
     setIsSpinning(true);
-    setTimeout(() => setIsSpinning(false), 700);
+    setTimeout(() => setIsSpinning(false), SPIN_DURATION);
   };
 
   return (

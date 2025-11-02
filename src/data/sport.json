@@ -30,5 +30,45 @@
     "power": 387,
     "category": "Sport",
     "image": "/image-car/bmw-z4.png"
+  },
+  {
+    "id": 16,
+    "name": "BMW M2 Coupe",
+    "price": 95,
+    "power": 460,
+    "category": "Sport",
+    "image": "/image-car/bmw-m2.png"
+  },
+  {
+    "id": 17,
+    "name": "BMW M4 CSL",
+    "price": 175,
+    "power": 550,
+    "category": "Sport",
+    "image": "/image-car/bmw-m4csl.png"
+  },
+  {
+    "id": 18,
+    "name": "BMW M5 Competition",
+    "price": 155,
+    "power": 625,
+    "category": "Sport",
+    "image": "/image-car/bmw-m5-competition.png"
+  },
+  {
+    "id": 19,
+    "name": "BMW M440i xDrive Coupe",
+    "price": 105,
+    "power": 374,
+    "category": "Sport",
+    "image": "/image-car/bmw-m440i.png"
+  },
+  {
+    "id": 20,
+    "name": "BMW M850i Convertible",
+    "price": 185,
+    "power": 530,
+    "category": "Sport",
+    "image": "/image-car/bmw-m850i-convertible.png"
   }
 ]

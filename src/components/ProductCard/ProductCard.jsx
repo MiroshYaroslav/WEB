@@ -4,9 +4,8 @@ const ProductCard = ({ product }) => {
   return (
     <div className="product-card">
       <img
-        src={product.image || "/image-car/placeholder.png"} // placeholder якщо немає фото
+        src={product.image || "/image-car/placeholder.png"}
         alt={product.name}
-        className="product-image"
       />
       <h3>{product.name}</h3>
       <p className="power">Power: {product.power}hp</p>

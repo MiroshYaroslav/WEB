@@ -22,5 +22,53 @@
     "power": 510,
     "category": "SUV",
     "image": "/image-car/bmw-x3-m.png"
+  },
+  {
+    "id": 21,
+    "name": "BMW X1 xDrive30e",
+    "price": 55,
+    "power": 326,
+    "category": "SUV",
+    "image": "/image-car/bmw-x1.png"
+  },
+  {
+    "id": 22,
+    "name": "BMW X2 M35i",
+    "price": 62,
+    "power": 306,
+    "category": "SUV",
+    "image": "/image-car/bmw-x2.png"
+  },
+  {
+    "id": 23,
+    "name": "BMW X4 M40i",
+    "price": 78,
+    "power": 360,
+    "category": "SUV",
+    "image": "/image-car/bmw-x4.png"
+  },
+  {
+    "id": 24,
+    "name": "BMW X5 M Competition",
+    "price": 155,
+    "power": 625,
+    "category": "SUV",
+    "image": "/image-car/bmw-x5-m.png"
+  },
+  {
+    "id": 25,
+    "name": "BMW XM Label Red",
+    "price": 195,
+    "power": 748,
+    "category": "SUV",
+    "image": "/image-car/bmw-xm.png"
+  },
+  {
+    "id": 26,
+    "name": "BMW iX xDrive50",
+    "price": 135,
+    "power": 523,
+    "category": "SUV",
+    "image": "/image-car/bmw-ix-suv.png"
   }
 ]

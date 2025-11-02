@@ -14,5 +14,45 @@
     "power": 530,
     "category": "Luxury",
     "image": "/image-car/bmw-x7.png"
+  },
+  {
+    "id": 11,
+    "name": "BMW 7 Series 760i xDrive",
+    "price": 180,
+    "power": 544,
+    "category": "Luxury",
+    "image": "/image-car/bmw-7series.png"
+  },
+  {
+    "id": 12,
+    "name": "BMW 8 Series M850i xDrive",
+    "price": 175,
+    "power": 530,
+    "category": "Luxury",
+    "image": "/image-car/bmw-8series.png"
+  },
+  {
+    "id": 13,
+    "name": "BMW XM Label Red",
+    "price": 210,
+    "power": 748,
+    "category": "Luxury",
+    "image": "/image-car/bmw-xm.png"
+  },
+  {
+    "id": 14,
+    "name": "BMW Alpina B7",
+    "price": 195,
+    "power": 600,
+    "category": "Luxury",
+    "image": "/image-car/bmw-alpina-b7.png"
+  },
+  {
+    "id": 15,
+    "name": "BMW X6 M Competition",
+    "price": 175,
+    "power": 625,
+    "category": "Luxury",
+    "image": "/image-car/bmw-x6m.png"
   }
 ]

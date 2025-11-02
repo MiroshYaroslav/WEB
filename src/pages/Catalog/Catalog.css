@@ -1,0 +1,49 @@
+.catalog-page {
+  width: 100%;
+  padding: 3rem 0;
+  position: relative;
+  text-align: center;
+}
+
+.back-btn {
+  position: absolute;
+  top: 2rem;
+  left: 2rem;
+  font-size: 1rem;
+  color: var(--color-accent);
+  text-decoration: none;
+  transition:
+    color 0.3s,
+    transform 0.2s;
+  font-weight: 500;
+}
+
+.back-btn:hover {
+  color: var(--color-accent-hover);
+  transform: translateX(-4px);
+}
+
+.catalog-title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--color-accent);
+  margin: 2rem 0;
+}
+
+.no-products {
+  color: #aaa;
+  font-size: 1.05rem;
+  margin-top: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .back-btn {
+    top: 1.5rem;
+    left: 1.5rem;
+    font-size: 0.95rem;
+  }
+
+  .catalog-title {
+    font-size: 1.7rem;
+  }
+}

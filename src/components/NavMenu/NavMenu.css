@@ -7,10 +7,7 @@
   position: absolute;
   top: 130%;
   left: 50%;
-  transform: translate(
-    -50%,
-    -20px
-  ); /* спочатку зсув вгору на 20px (анімація) */
+  transform: translate(-50%, -10px);
   background: var(--color-bg-dark);
   border-radius: 10px;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
@@ -18,23 +15,47 @@
   min-width: 170px;
   z-index: 100;
   opacity: 0;
-  animation: fadeIn 0.25s forwards;
+  pointer-events: none;
+  transition: all 0.25s ease;
 }
 
-@keyframes fadeIn {
-  to {
-    opacity: 1;
-    transform: translate(-50%, 0); /* рух до позиції без зсуву */
-  }
+.dropdown-menu.active {
+  opacity: 1;
+  transform: translate(-50%, 0);
+  pointer-events: auto;
 }
 
 .dropdown-item {
   display: flex;
-  justify-content: center; /* ✅ по центру по горизонталі */
-  align-items: center; /* (опціонально) по вертикалі */
+  justify-content: center;
+  align-items: center;
   color: var(--color-text-dark);
   text-decoration: none;
   font-size: 0.95rem;
+  transition:
+    color 0.25s ease,
+    background 0.25s ease;
+  padding: 10px 0;
+}
+
+.dropdown-item:hover {
+  color: var(--color-accent);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.catalog-btn {
+  cursor: pointer;
+  font-style: normal;
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--color-text-dark);
   transition: color 0.25s ease;
-  padding: 10px 0; /* трохи додай відступів */
+}
+
+.catalog-btn:hover {
+  color: var(--color-accent);
+}
+
+.catalog-btn.active {
+  color: var(--color-accent);
 }
