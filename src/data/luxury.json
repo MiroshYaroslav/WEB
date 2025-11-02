@@ -1,0 +1,18 @@
+[
+  {
+    "id": 5,
+    "name": "BMW M5 CS",
+    "price": 399,
+    "power": 635,
+    "category": "Luxury",
+    "image": "/image-car/bmw-m5.png"
+  },
+  {
+    "id": 7,
+    "name": "BMW X7 M60i",
+    "price": 160,
+    "power": 530,
+    "category": "Luxury",
+    "image": "/image-car/bmw-x7.png"
+  }
+]

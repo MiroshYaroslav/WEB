@@ -1,0 +1,26 @@
+[
+  {
+    "id": 8,
+    "name": "BMW i4 M50",
+    "price": 75,
+    "power": 544,
+    "category": "Electric",
+    "image": "/image-car/bmw-i4.png"
+  },
+  {
+    "id": 9,
+    "name": "BMW i7 xDrive60",
+    "price": 155,
+    "power": 544,
+    "category": "Electric",
+    "image": "/image-car/bmw-i7.png"
+  },
+  {
+    "id": 10,
+    "name": "BMW iX M60",
+    "price": 140,
+    "power": 619,
+    "category": "Electric",
+    "image": "/image-car/bmw-ix.png"
+  }
+]

@@ -1,0 +1,40 @@
+.catalog-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 130%;
+  left: 50%;
+  transform: translate(
+    -50%,
+    -20px
+  ); /* спочатку зсув вгору на 20px (анімація) */
+  background: var(--color-bg-dark);
+  border-radius: 10px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+  padding: 8px 0;
+  min-width: 170px;
+  z-index: 100;
+  opacity: 0;
+  animation: fadeIn 0.25s forwards;
+}
+
+@keyframes fadeIn {
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0); /* рух до позиції без зсуву */
+  }
+}
+
+.dropdown-item {
+  display: flex;
+  justify-content: center; /* ✅ по центру по горизонталі */
+  align-items: center; /* (опціонально) по вертикалі */
+  color: var(--color-text-dark);
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: color 0.25s ease;
+  padding: 10px 0; /* трохи додай відступів */
+}

@@ -1,16 +1,18 @@
 [
   {
     "id": 1,
-    "name": "BMW M8",
+    "name": "BMW M8 Competition",
     "price": 199,
-    "power": 510,
-    "image": "/image-car/img.png"
+    "power": 625,
+    "category": "Sport",
+    "image": "/image-car/bmw-m8.png"
   },
   {
     "id": 2,
     "name": "BMW X6 M",
     "price": 89,
     "power": 625,
+    "category": "SUV",
     "image": "/image-car/bmw-x6-m.png"
   },
   {
@@ -18,20 +20,79 @@
     "name": "BMW M3",
     "price": 129,
     "power": 530,
+    "category": "Sport",
     "image": "/image-car/bmw-m-3.png"
   },
   {
     "id": 4,
-    "name": "BMW M4",
-    "price": 551,
+    "name": "BMW M4 Coupe",
+    "price": 151,
     "power": 550,
-    "image": "/image-car/img_2.png"
+    "category": "Sport",
+    "image": "/image-car/bmw-m4.png"
   },
   {
     "id": 5,
-    "name": "BMW M5",
+    "name": "BMW M5 CS",
     "price": 399,
-    "power": 600,
+    "power": 635,
+    "category": "Luxury",
     "image": "/image-car/bmw-m5.png"
+  },
+  {
+    "id": 6,
+    "name": "BMW X5 xDrive45e",
+    "price": 120,
+    "power": 394,
+    "category": "SUV",
+    "image": "/image-car/bmw-x5.png"
+  },
+  {
+    "id": 7,
+    "name": "BMW X7 M60i",
+    "price": 160,
+    "power": 530,
+    "category": "Luxury",
+    "image": "/image-car/bmw-x7.png"
+  },
+  {
+    "id": 8,
+    "name": "BMW i4 M50",
+    "price": 75,
+    "power": 544,
+    "category": "Electric",
+    "image": "/image-car/bmw-i4.png"
+  },
+  {
+    "id": 9,
+    "name": "BMW i7 xDrive60",
+    "price": 155,
+    "power": 544,
+    "category": "Electric",
+    "image": "/image-car/bmw-i7.png"
+  },
+  {
+    "id": 10,
+    "name": "BMW iX M60",
+    "price": 140,
+    "power": 619,
+    "category": "Electric",
+    "image": "/image-car/bmw-ix.png"
+  },
+  {
+    "id": 11,
+    "name": "BMW X3 M Competition",
+    "price": 95,
+    "power": 510,
+    "category": "SUV",
+    "image": "/image-car/bmw-x3-m.png"
+  },
+  {
+    "id": 12,
+    "name": "BMW Z4 Roadster",
+    "price": 85,
+    "power": 387,
+    "category": "Sport",
+    "image": "/image-car/bmw-z4.png"
   }
 ]

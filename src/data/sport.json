@@ -1,0 +1,34 @@
+[
+  {
+    "id": 1,
+    "name": "BMW M8 Competition",
+    "price": 199,
+    "power": 625,
+    "category": "Sport",
+    "image": "/image-car/bmw-m8.png"
+  },
+  {
+    "id": 3,
+    "name": "BMW M3",
+    "price": 129,
+    "power": 530,
+    "category": "Sport",
+    "image": "/image-car/bmw-m-3.png"
+  },
+  {
+    "id": 4,
+    "name": "BMW M4 Coupe",
+    "price": 151,
+    "power": 550,
+    "category": "Sport",
+    "image": "/image-car/bmw-m4.png"
+  },
+  {
+    "id": 12,
+    "name": "BMW Z4 Roadster",
+    "price": 85,
+    "power": 387,
+    "category": "Sport",
+    "image": "/image-car/bmw-z4.png"
+  }
+]

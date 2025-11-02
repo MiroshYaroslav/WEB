@@ -1,8 +1,12 @@
 .header {
   width: 100%;
-  background-color: #1a1a1a;
-  color: #fff;
+  background-color: var(--color-black);
+  color: var(--color-text-dark);
   padding: 1rem 0;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
 }
 
 .header-inner {
@@ -12,10 +16,11 @@
   flex-wrap: wrap;
 }
 
+/* ---------------- LOGO ---------------- */
 .logo {
   height: 60px;
   cursor: pointer;
-  transition: filter 0.3s;
+  transition: filter 0.3s ease;
 }
 
 .logo img {
@@ -23,35 +28,75 @@
   width: auto;
 }
 
-/* Ефект при наведенні — лише підсвітка */
 .logo:hover {
-  filter: drop-shadow(0 0 1rem #646cffaa);
+  filter: drop-shadow(0 0 1rem var(--color-accent-hover));
 }
 
-/* Клас, який запускає анімацію повороту */
 .spin-once {
   animation: spin 0.7s linear;
-  filter: drop-shadow(0 0 1rem #646cffaa);
+  filter: drop-shadow(0 0 1rem var(--color-accent-hover));
 }
 
-/* Навігація */
-.nav a {
-  margin-left: 1.5rem;
-  color: #fff;
-  text-decoration: none;
-  transition: color 0.3s;
-}
-
-.nav a:hover {
-  color: #646cff;
-}
-
-/* Анімація */
 @keyframes spin {
   from {
     transform: rotate(0deg);
   }
   to {
     transform: rotate(360deg);
+  }
+}
+
+/* ---------------- NAVIGATION ---------------- */
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  position: relative;
+}
+
+.nav a,
+.catalog-btn {
+  color: var(--color-text-dark);
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 500;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 6px 0;
+  transition:
+    color 0.3s ease,
+    transform 0.2s ease;
+}
+
+.nav a:hover,
+.catalog-btn:hover {
+  color: var(--color-accent);
+}
+
+/* ---------------- LIGHT THEME SUPPORT ---------------- */
+@media (prefers-color-scheme: light) {
+  .header {
+    background-color: var(--color-bg-light);
+    color: var(--color-text-light);
+  }
+
+  .nav a,
+  .catalog-btn {
+    color: var(--color-text-light);
+  }
+
+  .dropdown-menu {
+    background: var(--color-bg-light);
+    border-color: var(--color-accent-hover);
+  }
+
+  .dropdown-item {
+    color: var(--color-text-light);
+  }
+
+  .dropdown-item:hover {
+    background: var(--color-accent-hover);
+    color: #fff;
   }
 }

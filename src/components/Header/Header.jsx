@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import logo from "../../assets/logo.png";
+import NavMenu from "../NavMenu/NavMenu";
 import "./Header.css";
 
 const Header = () => {
@@ -29,11 +30,7 @@ const Header = () => {
           </Link>
         </div>
 
-        <nav className="nav">
-          <Link to="/">Home</Link>
-          <Link to="/catalog">Catalog</Link>
-          <Link to="/cart">Cart</Link>
-        </nav>
+        <NavMenu />
       </div>
     </header>
   );

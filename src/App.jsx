@@ -1,10 +1,8 @@
-import { Routes, Route } from "react-router-dom";
-import Header from "./components/Header/Header.jsx";
-import Hero from "./components/Hero/Hero.jsx";
-import AboutBMW from "./components/About/AboutBMW.jsx";
-import FeaturedProducts from "./components/ProductCard/FeaturedProducts.jsx";
-import Footer from "./components/Footer/Footer.jsx";
-import "./styles/responsive.css";
+import { Route, Routes } from "react-router-dom";
+import Header from "./components/Header/Header";
+import Home from "./pages/Home";
+import Catalog from "./pages/Catalog.jsx";
+import Footer from "./components/Footer/Footer";
 
 function App() {
   return (
@@ -12,16 +10,8 @@ function App() {
       <Header />
       <main>
         <Routes>
-          <Route
-            path="/"
-            element={
-              <>
-                <Hero />
-                <AboutBMW />
-                <FeaturedProducts />
-              </>
-            }
-          />
+          <Route path="/" element={<Home />} />
+          <Route path="/catalog/:category" element={<Catalog />} />
         </Routes>
       </main>
       <Footer />

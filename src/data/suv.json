@@ -1,0 +1,26 @@
+[
+  {
+    "id": 2,
+    "name": "BMW X6 M",
+    "price": 89,
+    "power": 625,
+    "category": "SUV",
+    "image": "/image-car/bmw-x6-m.png"
+  },
+  {
+    "id": 6,
+    "name": "BMW X5 xDrive45e",
+    "price": 120,
+    "power": 394,
+    "category": "SUV",
+    "image": "/image-car/bmw-x5.png"
+  },
+  {
+    "id": 11,
+    "name": "BMW X3 M Competition",
+    "price": 95,
+    "power": 510,
+    "category": "SUV",
+    "image": "/image-car/bmw-x3-m.png"
+  }
+]
