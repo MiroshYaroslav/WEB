@@ -5,7 +5,20 @@
     "price": 399,
     "power": 635,
     "category": "Luxury",
-    "image": "/image-car/bmw-m5.png"
+    "image": "/image-car/bmw-m5.png",
+    "topSpeed": "305 km/h",
+    "acceleration": "3.0 s",
+    "description": "The BMW M5 CS is the most powerful BMW ever built, combining luxury and extreme performance. Lightweight design and precision handling define this masterpiece.",
+    "reviews": [
+      {
+        "name": "Oleh S.",
+        "text": "A beast in a suit. Comfort and speed in perfect harmony!"
+      },
+      {
+        "name": "Kateryna L.",
+        "text": "The acceleration is unreal. Feels like a race car wrapped in luxury."
+      }
+    ]
   },
   {
     "id": 7,
@@ -13,7 +26,20 @@
     "price": 160,
     "power": 530,
     "category": "Luxury",
-    "image": "/image-car/bmw-x7.png"
+    "image": "/image-car/bmw-x7.png",
+    "topSpeed": "250 km/h",
+    "acceleration": "4.7 s",
+    "description": "The BMW X7 M60i is the flagship SUV that blends elegance, space, and M performance. The perfect mix of power, comfort, and innovation.",
+    "reviews": [
+      {
+        "name": "Andrii P.",
+        "text": "Massive presence, effortless power. The best family luxury SUV."
+      },
+      {
+        "name": "Iryna S.",
+        "text": "Incredible comfort and attention to detail. Drives like a dream."
+      }
+    ]
   },
   {
     "id": 11,
@@ -21,7 +47,20 @@
     "price": 180,
     "power": 544,
     "category": "Luxury",
-    "image": "/image-car/bmw-7series.png"
+    "image": "/image-car/bmw-7series.png",
+    "topSpeed": "250 km/h",
+    "acceleration": "4.2 s",
+    "description": "The BMW 7 Series 760i xDrive delivers first-class luxury with a commanding V8 engine and an interior designed for ultimate comfort and innovation.",
+    "reviews": [
+      {
+        "name": "Taras B.",
+        "text": "The ultimate executive car. Smooth, silent, and powerful."
+      },
+      {
+        "name": "Olha H.",
+        "text": "Every detail screams luxury. Perfect for long drives."
+      }
+    ]
   },
   {
     "id": 12,
@@ -29,7 +68,20 @@
     "price": 175,
     "power": 530,
     "category": "Luxury",
-    "image": "/image-car/bmw-8series.png"
+    "image": "/image-car/bmw-8series.png",
+    "topSpeed": "250 km/h",
+    "acceleration": "3.9 s",
+    "description": "The BMW 8 Series M850i xDrive combines elegant design with breathtaking performance, offering a grand touring experience like no other.",
+    "reviews": [
+      {
+        "name": "Mykhailo N.",
+        "text": "Incredible balance of sport and luxury. Feels special every time."
+      },
+      {
+        "name": "Alina R.",
+        "text": "A true head-turner — fast, elegant, and full of tech."
+      }
+    ]
   },
   {
     "id": 13,
@@ -37,7 +89,20 @@
     "price": 210,
     "power": 748,
     "category": "Luxury",
-    "image": "/image-car/bmw-xm.png"
+    "image": "/image-car/bmw-xm.png",
+    "topSpeed": "250 km/h",
+    "acceleration": "3.8 s",
+    "description": "The BMW XM Label Red is a bold plug-in hybrid that delivers exceptional power, luxury, and exclusivity. A statement of performance and prestige.",
+    "reviews": [
+      {
+        "name": "Denys T.",
+        "text": "Powerful, aggressive, and unique. The red accents are stunning!"
+      },
+      {
+        "name": "Viktoriia M.",
+        "text": "It’s a luxury SUV that feels like a supercar. Absolutely love it!"
+      }
+    ]
   },
   {
     "id": 14,
@@ -45,7 +110,20 @@
     "price": 195,
     "power": 600,
     "category": "Luxury",
-    "image": "/image-car/bmw-alpina-b7.png"
+    "image": "/image-car/bmw-alpina-b7.png",
+    "topSpeed": "330 km/h",
+    "acceleration": "3.6 s",
+    "description": "The BMW Alpina B7 blends handcrafted luxury with breathtaking speed. One of the fastest and most refined sedans in the world.",
+    "reviews": [
+      {
+        "name": "Yurii V.",
+        "text": "Unmatched ride comfort and speed. The perfect business sedan."
+      },
+      {
+        "name": "Natalia K.",
+        "text": "Elegant yet powerful — Alpina perfection!"
+      }
+    ]
   },
   {
     "id": 15,
@@ -53,6 +131,19 @@
     "price": 175,
     "power": 625,
     "category": "Luxury",
-    "image": "/image-car/bmw-x6m.png"
+    "image": "/image-car/bmw-x6m.png",
+    "topSpeed": "290 km/h",
+    "acceleration": "3.8 s",
+    "description": "The BMW X6 M Competition redefines the SUV coupe with its dynamic design and heart-pounding M performance.",
+    "reviews": [
+      {
+        "name": "Roman D.",
+        "text": "Feels like a sports car but higher. Incredible handling!"
+      },
+      {
+        "name": "Diana Z.",
+        "text": "Beautiful design and crazy fast. Worth every cent."
+      }
+    ]
   }
 ]

@@ -5,7 +5,20 @@
     "price": 199,
     "power": 625,
     "category": "Sport",
-    "image": "/image-car/bmw-m8.png"
+    "image": "/image-car/bmw-m8.png",
+    "topSpeed": "305 km/h",
+    "acceleration": "3.2 s",
+    "description": "The BMW M8 Competition delivers breathtaking performance and luxury with a powerful V8 engine and precise handling.",
+    "reviews": [
+      {
+        "name": "Andrii K.",
+        "text": "Unreal acceleration and incredible grip!"
+      },
+      {
+        "name": "Nazar T.",
+        "text": "The interior feels like a luxury spaceship."
+      }
+    ]
   },
   {
     "id": 3,
@@ -13,7 +26,20 @@
     "price": 129,
     "power": 530,
     "category": "Sport",
-    "image": "/image-car/bmw-m-3.png"
+    "image": "/image-car/bmw-m-3.png",
+    "topSpeed": "290 km/h",
+    "acceleration": "3.9 s",
+    "description": "The legendary BMW M3 — a balance of agility, power, and precision. Perfect for both the track and the city.",
+    "reviews": [
+      {
+        "name": "Ihor B.",
+        "text": "Handles corners like a dream!"
+      },
+      {
+        "name": "Vlad M.",
+        "text": "Best all-round sports sedan in its class."
+      }
+    ]
   },
   {
     "id": 4,
@@ -21,7 +47,20 @@
     "price": 151,
     "power": 550,
     "category": "Sport",
-    "image": "/image-car/bmw-m4.png"
+    "image": "/image-car/bmw-m4.png",
+    "topSpeed": "290 km/h",
+    "acceleration": "3.7 s",
+    "description": "Aggressive design meets thrilling performance. The M4 Coupe brings pure BMW M DNA to life.",
+    "reviews": [
+      {
+        "name": "Taras P.",
+        "text": "Every drive feels like a race!"
+      },
+      {
+        "name": "Roman S.",
+        "text": "The perfect mix of power and balance."
+      }
+    ]
   },
   {
     "id": 12,
@@ -29,7 +68,20 @@
     "price": 85,
     "power": 387,
     "category": "Sport",
-    "image": "/image-car/bmw-z4.png"
+    "image": "/image-car/bmw-z4.png",
+    "topSpeed": "250 km/h",
+    "acceleration": "4.5 s",
+    "description": "Open-top freedom and sports car dynamics — the BMW Z4 Roadster offers an exhilarating driving experience.",
+    "reviews": [
+      {
+        "name": "Kateryna H.",
+        "text": "Feels amazing to drive with the roof down!"
+      },
+      {
+        "name": "Yurii D.",
+        "text": "A compact powerhouse with pure BMW soul."
+      }
+    ]
   },
   {
     "id": 16,
@@ -37,7 +89,20 @@
     "price": 95,
     "power": 460,
     "category": "Sport",
-    "image": "/image-car/bmw-m2.png"
+    "image": "/image-car/bmw-m2.png",
+    "topSpeed": "280 km/h",
+    "acceleration": "4.1 s",
+    "description": "Compact yet fierce, the BMW M2 Coupe combines lightweight agility with M-series muscle.",
+    "reviews": [
+      {
+        "name": "Dmytro V.",
+        "text": "Small car, massive fun!"
+      },
+      {
+        "name": "Serhii R.",
+        "text": "Perfect handling and raw power."
+      }
+    ]
   },
   {
     "id": 17,
@@ -45,7 +110,20 @@
     "price": 175,
     "power": 550,
     "category": "Sport",
-    "image": "/image-car/bmw-m4csl.png"
+    "image": "/image-car/bmw-m4csl.png",
+    "topSpeed": "310 km/h",
+    "acceleration": "3.6 s",
+    "description": "A track-focused monster — lighter, faster, and sharper. The M4 CSL is pure racing DNA on the road.",
+    "reviews": [
+      {
+        "name": "Maksym Z.",
+        "text": "The best M car I’ve ever driven."
+      },
+      {
+        "name": "Denys B.",
+        "text": "Insane performance and looks!"
+      }
+    ]
   },
   {
     "id": 18,
@@ -53,7 +131,20 @@
     "price": 155,
     "power": 625,
     "category": "Sport",
-    "image": "/image-car/bmw-m5-competition.png"
+    "image": "/image-car/bmw-m5-competition.png",
+    "topSpeed": "305 km/h",
+    "acceleration": "3.3 s",
+    "description": "The ultimate sports sedan — comfort, luxury, and devastating power in one package.",
+    "reviews": [
+      {
+        "name": "Andrii L.",
+        "text": "A true beast that can still cruise smoothly."
+      },
+      {
+        "name": "Pavlo G.",
+        "text": "Incredible mix of elegance and performance."
+      }
+    ]
   },
   {
     "id": 19,
@@ -61,7 +152,20 @@
     "price": 105,
     "power": 374,
     "category": "Sport",
-    "image": "/image-car/bmw-m440i.png"
+    "image": "/image-car/bmw-m440i.png",
+    "topSpeed": "250 km/h",
+    "acceleration": "4.7 s",
+    "description": "A refined coupe with M performance — dynamic, stylish, and built to thrill every day.",
+    "reviews": [
+      {
+        "name": "Oleksii N.",
+        "text": "Smooth power delivery and great sound!"
+      },
+      {
+        "name": "Mykola S.",
+        "text": "A fantastic daily sports car."
+      }
+    ]
   },
   {
     "id": 20,
@@ -69,6 +173,19 @@
     "price": 185,
     "power": 530,
     "category": "Sport",
-    "image": "/image-car/bmw-m850i-convertible.png"
+    "image": "/image-car/bmw-m850i-convertible.png",
+    "topSpeed": "305 km/h",
+    "acceleration": "3.9 s",
+    "description": "Luxury grand tourer with an open-top experience — the M850i Convertible is both elegant and powerful.",
+    "reviews": [
+      {
+        "name": "Oksana T.",
+        "text": "Feels like flying on the highway!"
+      },
+      {
+        "name": "Stepan R.",
+        "text": "Top-tier comfort and performance."
+      }
+    ]
   }
 ]

@@ -5,7 +5,20 @@
     "price": 89,
     "power": 625,
     "category": "SUV",
-    "image": "/image-car/bmw-x6-m.png"
+    "image": "/image-car/bmw-x6-m.png",
+    "topSpeed": "290 km/h",
+    "acceleration": "3.9 s",
+    "description": "The BMW X6 M delivers the performance of a sports car with the presence of an SUV. Muscular, dynamic, and luxurious — it’s made to dominate any road.",
+    "reviews": [
+      {
+        "name": "Oleksandr K.",
+        "text": "Insane power! Drives like a sportscar, looks like a king."
+      },
+      {
+        "name": "Svitlana R.",
+        "text": "The mix of performance and comfort is just perfect."
+      }
+    ]
   },
   {
     "id": 6,
@@ -13,7 +26,20 @@
     "price": 120,
     "power": 394,
     "category": "SUV",
-    "image": "/image-car/bmw-x5.png"
+    "image": "/image-car/bmw-x5.png",
+    "topSpeed": "235 km/h",
+    "acceleration": "5.6 s",
+    "description": "The BMW X5 xDrive45e combines hybrid efficiency with traditional BMW power. Perfect for drivers who want luxury and sustainability in one package.",
+    "reviews": [
+      {
+        "name": "Dmytro P.",
+        "text": "Comfortable, efficient, and surprisingly fast!"
+      },
+      {
+        "name": "Liliia H.",
+        "text": "Silent drive in EV mode and smooth acceleration — love it."
+      }
+    ]
   },
   {
     "id": 11,
@@ -21,7 +47,20 @@
     "price": 95,
     "power": 510,
     "category": "SUV",
-    "image": "/image-car/bmw-x3-m.png"
+    "image": "/image-car/bmw-x3-m.png",
+    "topSpeed": "285 km/h",
+    "acceleration": "4.0 s",
+    "description": "The BMW X3 M Competition is a compact performance SUV that delivers thrilling agility and the pure spirit of M in a versatile design.",
+    "reviews": [
+      {
+        "name": "Roman D.",
+        "text": "Feels like an M3 on stilts. Quick and sharp!"
+      },
+      {
+        "name": "Olena V.",
+        "text": "Perfect daily car with incredible performance."
+      }
+    ]
   },
   {
     "id": 21,
@@ -29,7 +68,20 @@
     "price": 55,
     "power": 326,
     "category": "SUV",
-    "image": "/image-car/bmw-x1.png"
+    "image": "/image-car/bmw-x1.png",
+    "topSpeed": "210 km/h",
+    "acceleration": "5.6 s",
+    "description": "The BMW X1 xDrive30e is the ideal compact hybrid SUV, offering efficiency, style, and the agility typical of BMW’s smallest SAV.",
+    "reviews": [
+      {
+        "name": "Maksym L.",
+        "text": "Great city car — small outside, big inside!"
+      },
+      {
+        "name": "Iryna P.",
+        "text": "Love the hybrid system. Very smooth transition between modes."
+      }
+    ]
   },
   {
     "id": 22,
@@ -37,7 +89,20 @@
     "price": 62,
     "power": 306,
     "category": "SUV",
-    "image": "/image-car/bmw-x2.png"
+    "image": "/image-car/bmw-x2.png",
+    "topSpeed": "250 km/h",
+    "acceleration": "4.9 s",
+    "description": "The BMW X2 M35i brings sporty looks and performance to the compact crossover segment — bold, fast, and fun to drive.",
+    "reviews": [
+      {
+        "name": "Yevhen S.",
+        "text": "Looks sporty and drives like a hot hatch — love it!"
+      },
+      {
+        "name": "Kateryna Z.",
+        "text": "Fun and practical at the same time. Great daily SUV."
+      }
+    ]
   },
   {
     "id": 23,
@@ -45,7 +110,20 @@
     "price": 78,
     "power": 360,
     "category": "SUV",
-    "image": "/image-car/bmw-x4.png"
+    "image": "/image-car/bmw-x4.png",
+    "topSpeed": "250 km/h",
+    "acceleration": "4.8 s",
+    "description": "The BMW X4 M40i combines coupe-like design with the practicality of an SUV, delivering sporty handling and a premium interior.",
+    "reviews": [
+      {
+        "name": "Andrii M.",
+        "text": "Sleek and sporty. The driving dynamics are spot on."
+      },
+      {
+        "name": "Daria T.",
+        "text": "Love the coupe style! Comfort meets performance."
+      }
+    ]
   },
   {
     "id": 24,
@@ -53,7 +131,20 @@
     "price": 155,
     "power": 625,
     "category": "SUV",
-    "image": "/image-car/bmw-x5-m.png"
+    "image": "/image-car/bmw-x5-m.png",
+    "topSpeed": "290 km/h",
+    "acceleration": "3.9 s",
+    "description": "The BMW X5 M Competition is the definition of luxury and power in the SUV world. Uncompromising performance and unmatched comfort.",
+    "reviews": [
+      {
+        "name": "Yaroslav G.",
+        "text": "Huge power, stunning quality. Worth every bit."
+      },
+      {
+        "name": "Sofiia V.",
+        "text": "Incredible SUV — fast, luxurious, and surprisingly agile."
+      }
+    ]
   },
   {
     "id": 25,
@@ -61,7 +152,20 @@
     "price": 195,
     "power": 748,
     "category": "SUV",
-    "image": "/image-car/bmw-xm.png"
+    "image": "/image-car/bmw-xm.png",
+    "topSpeed": "250 km/h",
+    "acceleration": "3.8 s",
+    "description": "The BMW XM Label Red is the most powerful M model ever built — bold hybrid performance and ultimate luxury combined in one extraordinary SUV.",
+    "reviews": [
+      {
+        "name": "Denys K.",
+        "text": "Unreal power! Hybrid technology done right."
+      },
+      {
+        "name": "Viktoria H.",
+        "text": "Massive, luxurious, and lightning-fast — it’s art on wheels."
+      }
+    ]
   },
   {
     "id": 26,
@@ -69,6 +173,19 @@
     "price": 135,
     "power": 523,
     "category": "SUV",
-    "image": "/image-car/bmw-ix-suv.png"
+    "image": "/image-car/bmw-ix-suv.png",
+    "topSpeed": "250 km/h",
+    "acceleration": "4.6 s",
+    "description": "The all-electric BMW iX xDrive50 offers futuristic design, high efficiency, and instant torque — redefining what an electric SUV can be.",
+    "reviews": [
+      {
+        "name": "Oksana N.",
+        "text": "Silent, smooth, and futuristic. A glimpse of the future."
+      },
+      {
+        "name": "Andrii B.",
+        "text": "Electric power with true BMW soul — love the iX!"
+      }
+    ]
   }
 ]

@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import Hero from "../components/Hero/Hero";
-import FeaturedProducts from "../components/ProductCard/FeaturedProducts";
+import FeaturedProducts from "../components/FeaturedProducts/FeaturedProducts.jsx";
 import AboutBMW from "../components/About/AboutBMW";
 
 const Home = () => {

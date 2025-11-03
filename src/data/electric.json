@@ -5,7 +5,20 @@
     "price": 75,
     "power": 544,
     "category": "Electric",
-    "image": "/image-car/bmw-i4.png"
+    "image": "/image-car/bmw-i4.png",
+    "topSpeed": "225 km/h",
+    "acceleration": "3.9 s",
+    "description": "The BMW i4 M50 is an all-electric Gran Coupé that delivers M performance with zero emissions. It combines instant torque, a sleek design, and a luxurious interior.",
+    "reviews": [
+      {
+        "name": "Max R.",
+        "text": "Amazing acceleration and premium feel. Silent but deadly fast!"
+      },
+      {
+        "name": "Anna P.",
+        "text": "Feels like driving the future. Stunning design and great range."
+      }
+    ]
   },
   {
     "id": 9,
@@ -13,7 +26,20 @@
     "price": 155,
     "power": 544,
     "category": "Electric",
-    "image": "/image-car/bmw-i7.png"
+    "image": "/image-car/bmw-i7.png",
+    "topSpeed": "240 km/h",
+    "acceleration": "4.7 s",
+    "description": "The BMW i7 xDrive60 redefines electric luxury with its unmatched comfort, advanced technology, and smooth power delivery.",
+    "reviews": [
+      {
+        "name": "Dmytro L.",
+        "text": "Ultimate comfort. You don’t hear or feel the road — it’s pure luxury."
+      },
+      {
+        "name": "Olha T.",
+        "text": "The interior is breathtaking and the tech is next level."
+      }
+    ]
   },
   {
     "id": 10,
@@ -21,7 +47,20 @@
     "price": 140,
     "power": 619,
     "category": "Electric",
-    "image": "/image-car/bmw-ix.png"
+    "image": "/image-car/bmw-ix.png",
+    "topSpeed": "250 km/h",
+    "acceleration": "3.8 s",
+    "description": "The BMW iX M60 combines M-level performance with electric innovation. Powerful, spacious, and designed for the modern driver.",
+    "reviews": [
+      {
+        "name": "Serhii B.",
+        "text": "Insane torque! Feels like a spaceship on wheels."
+      },
+      {
+        "name": "Iryna V.",
+        "text": "Luxury SUV with performance that beats many sports cars."
+      }
+    ]
   },
   {
     "id": 11,
@@ -29,7 +68,20 @@
     "price": 60,
     "power": 313,
     "category": "Electric",
-    "image": "/image-car/bmw-ix1.png"
+    "image": "/image-car/bmw-ix1.png",
+    "topSpeed": "180 km/h",
+    "acceleration": "5.6 s",
+    "description": "The BMW iX1 xDrive30 brings electric driving to the compact SUV class — efficient, agile, and ideal for everyday adventures.",
+    "reviews": [
+      {
+        "name": "Ivan K.",
+        "text": "Perfect size and great efficiency. Great daily electric SUV."
+      },
+      {
+        "name": "Kateryna D.",
+        "text": "Compact but powerful — a joy to drive in the city!"
+      }
+    ]
   },
   {
     "id": 12,
@@ -37,7 +89,20 @@
     "price": 85,
     "power": 601,
     "category": "Electric",
-    "image": "/image-car/bmw-i5.png"
+    "image": "/image-car/bmw-i5.png",
+    "topSpeed": "230 km/h",
+    "acceleration": "3.8 s",
+    "description": "The BMW i5 M60 xDrive delivers M performance with electric precision. A perfect balance of sportiness, innovation, and business-class comfort.",
+    "reviews": [
+      {
+        "name": "Yaroslav P.",
+        "text": "Feels like an M5 but electric. Smooth, fast, and elegant."
+      },
+      {
+        "name": "Maria N.",
+        "text": "Excellent handling and luxurious ride — 10/10."
+      }
+    ]
   },
   {
     "id": 13,
@@ -45,7 +110,20 @@
     "price": 58,
     "power": 313,
     "category": "Electric",
-    "image": "/image-car/bmw-ix2.png"
+    "image": "/image-car/bmw-ix2.png",
+    "topSpeed": "180 km/h",
+    "acceleration": "5.6 s",
+    "description": "The BMW iX2 xDrive30 is a stylish electric crossover that merges coupe design with practicality and intelligent electric power.",
+    "reviews": [
+      {
+        "name": "Ostap M.",
+        "text": "Stylish and fun to drive. Great visibility and features."
+      },
+      {
+        "name": "Viktoriia R.",
+        "text": "Sporty design and solid range — love it!"
+      }
+    ]
   },
   {
     "id": 14,
@@ -53,6 +131,19 @@
     "price": 120,
     "power": 670,
     "category": "Electric",
-    "image": "/image-car/bmw-i-vision-dee.png"
+    "image": "/image-car/bmw-i-vision-dee.png",
+    "topSpeed": "250 km/h",
+    "acceleration": "3.5 s",
+    "description": "The BMW i Vision Dee is a futuristic concept showcasing digital emotion, mixed-reality displays, and cutting-edge electric performance.",
+    "reviews": [
+      {
+        "name": "Taras H.",
+        "text": "A glimpse into the future — absolutely stunning!"
+      },
+      {
+        "name": "Nina S.",
+        "text": "Futuristic design and amazing innovations from BMW."
+      }
+    ]
   }
 ]
