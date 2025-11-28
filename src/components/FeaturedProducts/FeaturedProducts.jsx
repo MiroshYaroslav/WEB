@@ -1,6 +1,7 @@
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import ProductCard from "../ProductCard/ProductCard.jsx";
 import { useMemo, useState } from "react";
+import FiltersPanel from "../FiltersPanel/FiltersPanel.jsx";
 import "./FeaturedProducts.css";
 
 import sport from "../../data/sport.json";
@@ -15,26 +16,63 @@ const FeaturedProducts = () => {
   );
   const [visibleCount, setVisibleCount] = useState(4);
   const [searchTerm, setSearchTerm] = useState("");
-  const [category, setCategory] = useState("All");
+
+  const [activeFilters, setActiveFilters] = useState({
+    categories: [],
+    priceRange: { min: "", max: "" },
+    sort: "",
+  });
 
   const filteredProducts = useMemo(() => {
-    return allProducts
-      .filter(
-        (p) =>
-          (category === "All" || p.category === category) &&
-          p.name.toLowerCase().includes(searchTerm.toLowerCase()),
-      )
-      .sort(() => 0.5 - Math.random());
-  }, [allProducts, category, searchTerm]);
+    let result = [...allProducts];
+
+    if (searchTerm) {
+      result = result.filter((p) =>
+        p.name.toLowerCase().includes(searchTerm.toLowerCase()),
+      );
+    }
+
+    if (activeFilters.categories.length > 0) {
+      result = result.filter((p) =>
+        activeFilters.categories.includes(p.category),
+      );
+    }
+
+    const minPrice = parseFloat(activeFilters.priceRange.min);
+    const maxPrice = parseFloat(activeFilters.priceRange.max);
+    if (!isNaN(minPrice)) result = result.filter((p) => p.price >= minPrice);
+    if (!isNaN(maxPrice)) result = result.filter((p) => p.price <= maxPrice);
+
+    switch (activeFilters.sort) {
+      case "price-asc":
+        result.sort((a, b) => a.price - b.price);
+        break;
+      case "price-desc":
+        result.sort((a, b) => b.price - a.price);
+        break;
+      case "power-asc":
+        result.sort((a, b) => a.power - b.power);
+        break;
+      case "power-desc":
+        result.sort((a, b) => b.power - a.power);
+        break;
+      default:
+        break;
+    }
+
+    return result;
+  }, [allProducts, searchTerm, activeFilters]);
 
   const visibleProducts = filteredProducts.slice(0, visibleCount);
 
   const handleToggle = () => {
-    if (visibleCount < filteredProducts.length) {
+    if (visibleCount < filteredProducts.length)
       setVisibleCount((prev) => prev + 4);
-    } else {
-      setVisibleCount(4);
-    }
+    else setVisibleCount(4);
+  };
+
+  const applyFilters = (filters) => {
+    setActiveFilters(filters);
   };
 
   return (
@@ -47,51 +85,33 @@ const FeaturedProducts = () => {
     >
       <h2 className="featured-title">Models</h2>
 
-      <div className="filters-bar">
-        <input
-          type="text"
-          placeholder="Search models..."
-          className="search-input"
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-        />
-        <select
-          className="filter-select"
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-        >
-          <option value="All">All</option>
-          <option value="Sport">Sport</option>
-          <option value="Luxury">Luxury</option>
-          <option value="SUV">SUV</option>
-          <option value="Electric">Electric</option>
-        </select>
-      </div>
+      <FiltersPanel
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
+        applyFilters={applyFilters}
+      />
 
       <motion.div
-        key={`${category}-${searchTerm}`}
+        key={`${searchTerm}-${activeFilters.sort}-${activeFilters.categories.join(",")}`}
         className="products-grid"
-        variants={{
-          visible: { opacity: 1, transition: { staggerChildren: 0.1 } },
-        }}
-        initial="visible"
-        animate="visible"
       >
-        {visibleProducts.length > 0 ? (
-          visibleProducts.map((product) => (
-            <motion.div
-              key={product.id}
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: -50 }}
-              transition={{ duration: 0.4, ease: "easeOut" }}
-            >
-              <ProductCard product={product} />
-            </motion.div>
-          ))
-        ) : (
-          <p className="no-results">No models found.</p>
-        )}
+        <AnimatePresence>
+          {visibleProducts.length > 0 ? (
+            visibleProducts.map((product) => (
+              <motion.div
+                key={product.id}
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -50 }}
+                transition={{ duration: 0.4, ease: "easeOut" }}
+              >
+                <ProductCard product={product} />
+              </motion.div>
+            ))
+          ) : (
+            <p className="no-results">No models found.</p>
+          )}
+        </AnimatePresence>
       </motion.div>
 
       <button className="view-more-btn" onClick={handleToggle}>
