@@ -1,48 +1,77 @@
 import { AnimatePresence, motion } from "framer-motion";
 import ProductCard from "../ProductCard/ProductCard.jsx";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import FiltersPanel from "../FiltersPanel/FiltersPanel.jsx";
 import "./FeaturedProducts.css";
-
-import sport from "../../data/sport.json";
-import luxury from "../../data/luxury.json";
-import suv from "../../data/suv.json";
-import electric from "../../data/electric.json";
+import { fetchProducts } from "../../utils/api";
 
 const FeaturedProducts = () => {
-  const allProducts = useMemo(
-    () => [...sport, ...luxury, ...suv, ...electric],
-    [],
-  );
+  const [products, setProducts] = useState([]);
   const [visibleCount, setVisibleCount] = useState(4);
   const [searchTerm, setSearchTerm] = useState("");
-
   const [activeFilters, setActiveFilters] = useState({
     categories: [],
     priceRange: { min: "", max: "" },
     sort: "",
   });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const controller = new AbortController();
+    setLoading(true);
+    setError("");
+
+    const params = {
+      q: searchTerm || undefined,
+      categories:
+        activeFilters.categories.length > 0
+          ? activeFilters.categories
+          : undefined,
+      minPrice: activeFilters.priceRange.min || undefined,
+      maxPrice: activeFilters.priceRange.max || undefined,
+      sort: activeFilters.sort || undefined,
+      limit: 200, // отримуємо максимум моделей
+    };
+
+    fetchProducts(params, { signal: controller.signal })
+      .then((data) => setProducts(Array.isArray(data) ? data : []))
+      .catch((err) => {
+        if (err.name !== "AbortError") {
+          console.error(err);
+          setError("Failed to load featured products.");
+          setProducts([]);
+        }
+      })
+      .finally(() => setLoading(false));
+
+    return () => controller.abort();
+  }, [searchTerm, activeFilters]);
 
   const filteredProducts = useMemo(() => {
-    let result = [...allProducts];
+    let result = [...products];
 
+    // Фільтр по пошуку
     if (searchTerm) {
       result = result.filter((p) =>
         p.name.toLowerCase().includes(searchTerm.toLowerCase()),
       );
     }
 
+    // Фільтр по категоріях
     if (activeFilters.categories.length > 0) {
       result = result.filter((p) =>
         activeFilters.categories.includes(p.category),
       );
     }
 
+    // Фільтр по ціні
     const minPrice = parseFloat(activeFilters.priceRange.min);
     const maxPrice = parseFloat(activeFilters.priceRange.max);
     if (!isNaN(minPrice)) result = result.filter((p) => p.price >= minPrice);
     if (!isNaN(maxPrice)) result = result.filter((p) => p.price <= maxPrice);
 
+    // Сортування
     switch (activeFilters.sort) {
       case "price-asc":
         result.sort((a, b) => a.price - b.price);
@@ -61,7 +90,7 @@ const FeaturedProducts = () => {
     }
 
     return result;
-  }, [allProducts, searchTerm, activeFilters]);
+  }, [products, searchTerm, activeFilters]);
 
   const visibleProducts = filteredProducts.slice(0, visibleCount);
 
@@ -71,9 +100,7 @@ const FeaturedProducts = () => {
     else setVisibleCount(4);
   };
 
-  const applyFilters = (filters) => {
-    setActiveFilters(filters);
-  };
+  const applyFilters = (filters) => setActiveFilters(filters);
 
   return (
     <motion.section
@@ -91,26 +118,27 @@ const FeaturedProducts = () => {
         applyFilters={applyFilters}
       />
 
+      {loading && <p className="loading">Loading models...</p>}
+      {error && <p className="error-text">{error}</p>}
+
       <motion.div
         key={`${searchTerm}-${activeFilters.sort}-${activeFilters.categories.join(",")}`}
         className="products-grid"
       >
         <AnimatePresence>
-          {visibleProducts.length > 0 ? (
-            visibleProducts.map((product) => (
-              <motion.div
-                key={product.id}
-                initial={{ opacity: 0, y: 50 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -50 }}
-                transition={{ duration: 0.4, ease: "easeOut" }}
-              >
-                <ProductCard product={product} />
-              </motion.div>
-            ))
-          ) : (
-            <p className="no-results">No models found.</p>
-          )}
+          {visibleProducts.length > 0
+            ? visibleProducts.map((product) => (
+                <motion.div
+                  key={product.id}
+                  initial={{ opacity: 0, y: 50 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -50 }}
+                  transition={{ duration: 0.4, ease: "easeOut" }}
+                >
+                  <ProductCard product={product} />
+                </motion.div>
+              ))
+            : !loading && <p className="no-results">No models found.</p>}
         </AnimatePresence>
       </motion.div>
 
