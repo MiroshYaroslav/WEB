@@ -52,6 +52,7 @@
   display: flex;
   justify-content: space-between;
   font-size: 0.95rem;
+  min-width: 200px;
 }
 
 .product-price {
