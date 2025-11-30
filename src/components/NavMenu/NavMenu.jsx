@@ -11,7 +11,6 @@ const NavMenu = () => {
   const [loadingCategories, setLoadingCategories] = useState(false);
   const [error, setError] = useState("");
 
-  // Закриваємо дропдаун при кліку поза ним
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
@@ -22,7 +21,6 @@ const NavMenu = () => {
     return () => document.removeEventListener("click", handleClickOutside);
   }, []);
 
-  // Завантаження категорій з бекенду
   useEffect(() => {
     const controller = new AbortController();
     setLoadingCategories(true);
@@ -84,10 +82,6 @@ const NavMenu = () => {
           )}
         </div>
       </div>
-
-      <Link to="/cart" className="nav-link">
-        Cart
-      </Link>
     </nav>
   );
 };

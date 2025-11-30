@@ -1,7 +1,13 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { fetchProductById, fetchReviews, fetchCategories } from "../../utils/api";
+import {
+  fetchCategories,
+  fetchProductById,
+  fetchReviews,
+  postReview,
+} from "../../utils/api";
+import ContactModal from "../../components/ContactModal/ContactModal.jsx";
 import "./ProductPage.css";
 
 const ProductPage = () => {
@@ -12,6 +18,77 @@ const ProductPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [isImageOpen, setIsImageOpen] = useState(false);
+  const [isContactOpen, setIsContactOpen] = useState(false);
+
+  const [form, setForm] = useState({ username: "", rating: "5", comment: "" });
+  const [submitLoading, setSubmitLoading] = useState(false);
+  const [submitError, setSubmitError] = useState("");
+  const [submitSuccess, setSubmitSuccess] = useState("");
+
+  const [hoverRating, setHoverRating] = useState(0);
+
+  const formatDate = (iso) => {
+    try {
+      if (!iso) return "";
+      const d = new Date(iso);
+      return d.toLocaleString(undefined, {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+    } catch {
+      return iso ?? "";
+    }
+  };
+
+  const renderStars = (rating) => {
+    const r = Number(rating) || 0;
+    const stars = [];
+    for (let i = 1; i <= 5; i++) {
+      stars.push(
+        <span
+          key={i}
+          className={`star ${i <= r ? "filled" : "empty"}`}
+          aria-hidden="true"
+        >
+          ★
+        </span>,
+      );
+    }
+    return (
+      <span className="stars" aria-label={`Rating ${r} of 5`}>
+        {stars}
+      </span>
+    );
+  };
+
+  const StarButton = ({ value }) => {
+    const active = value <= (hoverRating || Number(form.rating));
+    const handleKey = (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        setForm((s) => ({ ...s, rating: String(value) }));
+      }
+    };
+    return (
+      <button
+        type="button"
+        className={`star-button ${active ? "filled" : ""}`}
+        onMouseEnter={() => setHoverRating(value)}
+        onMouseLeave={() => setHoverRating(0)}
+        onFocus={() => setHoverRating(value)}
+        onBlur={() => setHoverRating(0)}
+        onClick={() => setForm((s) => ({ ...s, rating: String(value) }))}
+        onKeyDown={handleKey}
+        aria-label={`${value} star${value > 1 ? "s" : ""}`}
+        aria-pressed={Number(form.rating) === value}
+      >
+        ★
+      </button>
+    );
+  };
 
   useEffect(() => {
     const controller = new AbortController();
@@ -27,7 +104,6 @@ const ProductPage = () => {
         const revs = await fetchReviews(prod.id, { signal: controller.signal });
         setReviews(Array.isArray(revs) ? revs : []);
 
-        // fetch categories to resolve category_id -> category name
         const cats = await fetchCategories({ signal: controller.signal });
         if (Array.isArray(cats)) {
           const map = {};
@@ -52,6 +128,61 @@ const ProductPage = () => {
 
     return () => controller.abort();
   }, [id]);
+
+  useEffect(() => {
+    const onKeyDown = (e) => {
+      if (e.key === "Escape") {
+        if (isImageOpen) setIsImageOpen(false);
+      }
+    };
+    if (isImageOpen) {
+      window.addEventListener("keydown", onKeyDown);
+    }
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [isImageOpen]);
+
+  const handleFormChange = (e) => {
+    const { name, value } = e.target;
+    setForm((s) => ({ ...s, [name]: value }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setSubmitError("");
+    setSubmitSuccess("");
+
+    if (!form.username.trim()) {
+      setSubmitError("Please enter your name.");
+      return;
+    }
+    const rating = Number(form.rating);
+    if (!Number.isInteger(rating) || rating < 1 || rating > 5) {
+      setSubmitError("Rating must be an integer between 1 and 5.");
+      return;
+    }
+
+    const payload = {
+      product_id: product.id,
+      username: form.username.trim(),
+      rating,
+      comment: form.comment.trim() || null,
+    };
+
+    const controller = new AbortController();
+    setSubmitLoading(true);
+    try {
+      const created = await postReview(payload, { signal: controller.signal });
+      setReviews((r) => [created, ...r]);
+      setForm({ username: "", rating: "5", comment: "" });
+      setSubmitSuccess("Review submitted.");
+      setTimeout(() => setSubmitSuccess(""), 2500);
+    } catch (err) {
+      console.error(err);
+      setSubmitError(err.message || "Failed to submit review.");
+    } finally {
+      setSubmitLoading(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -78,10 +209,19 @@ const ProductPage = () => {
           ? categoriesMap[product.category_id] || `ID ${product.category_id}`
           : "Uncategorized",
     },
-    { label: "Top Speed", value: product.top_speed ? `${product.top_speed} km/h` : "" },
-    { label: "0–100 km/h", value: product.acceleration ? `${product.acceleration}s` : "" },
+    {
+      label: "Top Speed",
+      value: product.top_speed ? `${product.top_speed} km/h` : "",
+    },
+    {
+      label: "0–100 km/h",
+      value: product.acceleration ? `${product.acceleration}s` : "",
+    },
   ];
 
+  const imageSrc = product.image
+    ? `http://localhost:8000${product.image}`
+    : "/image-car/placeholder.png";
   return (
     <section className="section container product-page-container">
       <motion.div
@@ -97,7 +237,7 @@ const ProductPage = () => {
           transition={{ duration: 0.7, ease: "easeOut" }}
         >
           <img
-            src={product.image}
+            src={imageSrc}
             alt={product.name}
             className="clickable"
             onClick={() => setIsImageOpen(true)}
@@ -124,7 +264,12 @@ const ProductPage = () => {
 
           <p className="product-price">${product.price}</p>
 
-          <button className="btn add-to-cart">Add to Cart</button>
+          <button
+            className="btn contact-btn"
+            onClick={() => setIsContactOpen(true)}
+          >
+            Call / Contact
+          </button>
         </motion.div>
       </motion.div>
 
@@ -136,15 +281,71 @@ const ProductPage = () => {
         viewport={{ once: true }}
       >
         <h2>Customer Reviews</h2>
+
+        <form className="review-form" onSubmit={handleSubmit}>
+          <div className="form-row">
+            <input
+              name="username"
+              value={form.username}
+              onChange={handleFormChange}
+              placeholder="Your name"
+              aria-label="Your name"
+              disabled={submitLoading}
+            />
+
+            <div className="rating-stars" role="radiogroup" aria-label="Rating">
+              {[1, 2, 3, 4, 5].map((v) => (
+                <StarButton key={v} value={v} />
+              ))}
+            </div>
+          </div>
+
+          <input type="hidden" name="rating" value={form.rating} />
+
+          <textarea
+            name="comment"
+            value={form.comment}
+            onChange={handleFormChange}
+            placeholder="Write your review (optional)"
+            rows={4}
+            disabled={submitLoading}
+          />
+          <div className="form-actions">
+            <button
+              type="submit"
+              className="btn submit-btn"
+              disabled={submitLoading}
+            >
+              {submitLoading ? "Submitting..." : "Submit Review"}
+            </button>
+            {submitError && <div className="form-error">{submitError}</div>}
+            {submitSuccess && (
+              <div className="form-success">{submitSuccess}</div>
+            )}
+          </div>
+        </form>
+
         {reviews.length > 0 ? (
           reviews.map((r, i) => (
-            <div key={i} className="review-card">
-              <h4>{r.username}</h4>
+            <div key={r.id ?? i} className="review-card">
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                }}
+              >
+                <h4>{r.username}</h4>
+                <div style={{ textAlign: "right" }}>
+                  {renderStars(r.rating)}
+                  <div className="review-date">{formatDate(r.created_at)}</div>
+                </div>
+              </div>
               <p>{r.comment}</p>
             </div>
           ))
         ) : (
-          <p>No reviews yet.</p>
+          <p className="no-reviews">No reviews yet.</p>
         )}
       </motion.div>
 
@@ -158,7 +359,7 @@ const ProductPage = () => {
             onClick={() => setIsImageOpen(false)}
           >
             <motion.img
-              src={product.image}
+              src={imageSrc}
               alt={product.name}
               initial={{ scale: 0.8 }}
               animate={{ scale: 1 }}
@@ -168,6 +369,11 @@ const ProductPage = () => {
           </motion.div>
         )}
       </AnimatePresence>
+
+      <ContactModal
+        isOpen={isContactOpen}
+        onClose={() => setIsContactOpen(false)}
+      />
     </section>
   );
 };

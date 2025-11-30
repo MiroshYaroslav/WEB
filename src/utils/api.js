@@ -30,10 +30,39 @@ export async function fetchCategories(options = {}) {
   return res.json();
 }
 
-export async function fetchReviews(productId, options = {}) {
-  const res = await fetch(`${API}/reviews?product_id=${productId}`, {
+export async function fetchReviews(productId = undefined, options = {}) {
+  const qs = buildQuery({ product_id: productId });
+  const res = await fetch(`${API}/reviews${qs ? `?${qs}` : ""}`, {
     signal: options.signal,
   });
   if (!res.ok) throw new Error(`Failed to fetch reviews: ${res.status}`);
+  return res.json();
+}
+
+export async function postReview(payload = {}, options = {}) {
+  const res = await fetch(`${API}/reviews/`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    signal: options.signal,
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) {
+    let text = `Failed to post review: ${res.status}`;
+    try {
+      const j = await res.json();
+      if (j?.detail) text = `${text} - ${j.detail}`;
+    } catch {
+      /* empty */
+    }
+    throw new Error(text);
+  }
+  return res.json();
+}
+
+export async function fetchPhoneNumbers(options = {}) {
+  const res = await fetch(`${API}/phone-numbers/`, { signal: options.signal });
+  if (!res.ok) throw new Error(`Failed to fetch phone numbers: ${res.status}`);
   return res.json();
 }

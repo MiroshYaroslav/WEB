@@ -1,4 +1,6 @@
+import { useState } from "react";
 import { HashLink } from "react-router-hash-link";
+import ContactModal from "../ContactModal/ContactModal.jsx";
 import "./Footer.css";
 
 const scrollWithOffset = (el) => {
@@ -7,25 +9,40 @@ const scrollWithOffset = (el) => {
   window.scrollTo({ top: yCoordinate + yOffset, behavior: "smooth" });
 };
 
-const Footer = () => (
-  <footer className="footer">
-    <div className="container">
-      <div>
-        © {new Date().getFullYear()} BMW Official. All rights reserved.
+const Footer = () => {
+  const [isContactOpen, setIsContactOpen] = useState(false);
+  return (
+    <footer className="footer">
+      <div className="container">
+        <div>
+          © {new Date().getFullYear()} BMW Official. All rights reserved.
+        </div>
+        <div className="footer-links">
+          <HashLink smooth to="#about" scroll={(el) => scrollWithOffset(el)}>
+            About Us
+          </HashLink>
+          <HashLink
+            smooth
+            to="#contact"
+            scroll={(el) => scrollWithOffset(el)}
+            onClick={(e) => {
+              e.preventDefault();
+              setIsContactOpen(true);
+            }}
+          >
+            Contact
+          </HashLink>
+          <HashLink smooth to="#privacy" scroll={(el) => scrollWithOffset(el)}>
+            Privacy Policy
+          </HashLink>
+        </div>
       </div>
-      <div className="footer-links">
-        <HashLink smooth to="#about" scroll={(el) => scrollWithOffset(el)}>
-          About Us
-        </HashLink>
-        <HashLink smooth to="#contact" scroll={(el) => scrollWithOffset(el)}>
-          Contact
-        </HashLink>
-        <HashLink smooth to="#privacy" scroll={(el) => scrollWithOffset(el)}>
-          Privacy Policy
-        </HashLink>
-      </div>
-    </div>
-  </footer>
-);
+      <ContactModal
+        isOpen={isContactOpen}
+        onClose={() => setIsContactOpen(false)}
+      />
+    </footer>
+  );
+};
 
 export default Footer;

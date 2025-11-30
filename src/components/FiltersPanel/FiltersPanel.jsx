@@ -2,16 +2,14 @@ import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import "./FiltersPanel.css";
 
-const categoriesList = ["Sport", "Luxury", "SUV", "Electric"];
-
 const FiltersPanel = ({
   searchTerm,
   setSearchTerm,
   applyFilters,
   categoryFromURL,
+  categoriesList = [],
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [priceRange, setPriceRange] = useState({ min: "", max: "" });
   const [sortOption, setSortOption] = useState("");
@@ -19,11 +17,11 @@ const FiltersPanel = ({
 
   const togglePanel = () => setIsOpen((prev) => !prev);
 
-  const handleCategoryChange = (category) => {
+  const handleCategoryChange = (categoryId) => {
     setSelectedCategories((prev) =>
-      prev.includes(category)
-        ? prev.filter((c) => c !== category)
-        : [...prev, category],
+      prev.includes(categoryId)
+        ? prev.filter((c) => c !== categoryId)
+        : [...prev, categoryId],
     );
   };
 
@@ -93,18 +91,18 @@ const FiltersPanel = ({
             >
               <h3>Filters & Sorting</h3>
 
-              {!categoryFromURL && (
+              {!categoryFromURL && categoriesList.length > 0 && (
                 <div className="filter-group">
                   <label>Categories:</label>
                   {categoriesList.map((cat) => (
-                    <div key={cat} className="checkbox-item">
+                    <div key={cat.id} className="checkbox-item">
                       <input
                         type="checkbox"
-                        id={cat}
-                        checked={selectedCategories.includes(cat)}
-                        onChange={() => handleCategoryChange(cat)}
+                        id={cat.name}
+                        checked={selectedCategories.includes(cat.id)}
+                        onChange={() => handleCategoryChange(cat.id)}
                       />
-                      <label htmlFor={cat}>{cat}</label>
+                      <label htmlFor={cat.name}>{cat.name}</label>
                     </div>
                   ))}
                 </div>

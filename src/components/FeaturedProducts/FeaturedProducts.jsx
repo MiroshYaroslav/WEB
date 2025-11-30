@@ -1,21 +1,29 @@
 import { AnimatePresence, motion } from "framer-motion";
 import ProductCard from "../ProductCard/ProductCard.jsx";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import FiltersPanel from "../FiltersPanel/FiltersPanel.jsx";
 import "./FeaturedProducts.css";
-import { fetchProducts } from "../../utils/api";
+import { fetchCategories, fetchProducts } from "../../utils/api";
 
 const FeaturedProducts = () => {
   const [products, setProducts] = useState([]);
+  const [categoriesList, setCategoriesList] = useState([]);
   const [visibleCount, setVisibleCount] = useState(4);
   const [searchTerm, setSearchTerm] = useState("");
-  const [activeFilters, setActiveFilters] = useState({
+  const [filters, setFilters] = useState({
     categories: [],
     priceRange: { min: "", max: "" },
     sort: "",
   });
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  useEffect(() => {
+    fetchCategories()
+      .then((data) => setCategoriesList(data))
+      .catch(console.error);
+  }, []);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -23,15 +31,13 @@ const FeaturedProducts = () => {
     setError("");
 
     const params = {
-      q: searchTerm || undefined,
-      categories:
-        activeFilters.categories.length > 0
-          ? activeFilters.categories
-          : undefined,
-      minPrice: activeFilters.priceRange.min || undefined,
-      maxPrice: activeFilters.priceRange.max || undefined,
-      sort: activeFilters.sort || undefined,
-      limit: 200, // отримуємо максимум моделей
+      search: searchTerm || undefined,
+      min_price: filters.priceRange.min || undefined,
+      max_price: filters.priceRange.max || undefined,
+      sort: filters.sort || undefined,
+      category_id:
+        filters.categories.length > 0 ? filters.categories : undefined,
+      limit: 200,
     };
 
     fetchProducts(params, { signal: controller.signal })
@@ -46,61 +52,14 @@ const FeaturedProducts = () => {
       .finally(() => setLoading(false));
 
     return () => controller.abort();
-  }, [searchTerm, activeFilters]);
+  }, [searchTerm, filters]);
 
-  const filteredProducts = useMemo(() => {
-    let result = [...products];
-
-    // Фільтр по пошуку
-    if (searchTerm) {
-      result = result.filter((p) =>
-        p.name.toLowerCase().includes(searchTerm.toLowerCase()),
-      );
-    }
-
-    // Фільтр по категоріях
-    if (activeFilters.categories.length > 0) {
-      result = result.filter((p) =>
-        activeFilters.categories.includes(p.category),
-      );
-    }
-
-    // Фільтр по ціні
-    const minPrice = parseFloat(activeFilters.priceRange.min);
-    const maxPrice = parseFloat(activeFilters.priceRange.max);
-    if (!isNaN(minPrice)) result = result.filter((p) => p.price >= minPrice);
-    if (!isNaN(maxPrice)) result = result.filter((p) => p.price <= maxPrice);
-
-    // Сортування
-    switch (activeFilters.sort) {
-      case "price-asc":
-        result.sort((a, b) => a.price - b.price);
-        break;
-      case "price-desc":
-        result.sort((a, b) => b.price - a.price);
-        break;
-      case "power-asc":
-        result.sort((a, b) => a.power - b.power);
-        break;
-      case "power-desc":
-        result.sort((a, b) => b.power - a.power);
-        break;
-      default:
-        break;
-    }
-
-    return result;
-  }, [products, searchTerm, activeFilters]);
-
-  const visibleProducts = filteredProducts.slice(0, visibleCount);
+  const visibleProducts = products.slice(0, visibleCount);
 
   const handleToggle = () => {
-    if (visibleCount < filteredProducts.length)
-      setVisibleCount((prev) => prev + 4);
+    if (visibleCount < products.length) setVisibleCount((prev) => prev + 4);
     else setVisibleCount(4);
   };
-
-  const applyFilters = (filters) => setActiveFilters(filters);
 
   return (
     <motion.section
@@ -115,16 +74,14 @@ const FeaturedProducts = () => {
       <FiltersPanel
         searchTerm={searchTerm}
         setSearchTerm={setSearchTerm}
-        applyFilters={applyFilters}
+        applyFilters={setFilters}
+        categoriesList={categoriesList}
       />
 
       {loading && <p className="loading">Loading models...</p>}
       {error && <p className="error-text">{error}</p>}
 
-      <motion.div
-        key={`${searchTerm}-${activeFilters.sort}-${activeFilters.categories.join(",")}`}
-        className="products-grid"
-      >
+      <motion.div className="products-grid">
         <AnimatePresence>
           {visibleProducts.length > 0
             ? visibleProducts.map((product) => (
@@ -143,7 +100,7 @@ const FeaturedProducts = () => {
       </motion.div>
 
       <button className="view-more-btn" onClick={handleToggle}>
-        {visibleCount < filteredProducts.length ? "View More" : "Show Less"}
+        {visibleCount < products.length ? "View More" : "Show Less"}
       </button>
     </motion.section>
   );

@@ -1,0 +1,75 @@
+.contact-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 210;
+}
+
+.contact-dialog {
+  width: min(520px, 92vw);
+  background: #1f1f1f;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+}
+
+.contact-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.8rem 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.contact-header h3 {
+  margin: 0;
+}
+
+.contact-close {
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 1.3rem;
+  line-height: 1;
+  padding: 0.2rem 0.4rem;
+  cursor: pointer;
+}
+
+.contact-body {
+  padding: 1rem;
+}
+
+.contact-error {
+  color: #ff6b6b;
+}
+
+.phone-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.phone-item {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  padding: 0.75rem 0.9rem;
+  border-radius: 10px;
+}
+
+.phone-number {
+  color: var(--color-accent);
+  font-weight: 600;
+  font-size: 1.05rem;
+}
+
+.phone-desc {
+  color: #bfbfbf;
+  font-size: 0.9rem;
+  margin-top: 2px;
+}
