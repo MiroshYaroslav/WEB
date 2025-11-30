@@ -66,3 +66,68 @@ export async function fetchPhoneNumbers(options = {}) {
   if (!res.ok) throw new Error(`Failed to fetch phone numbers: ${res.status}`);
   return res.json();
 }
+
+export async function fetchFavorites(params = {}, options = {}) {
+  const qs = buildQuery(params);
+  const res = await fetch(`${API}/favorites${qs ? `?${qs}` : ""}`, {
+    signal: options.signal,
+  });
+  if (!res.ok) throw new Error(`Failed to fetch favorites: ${res.status}`);
+  return res.json();
+}
+
+export async function createFavorite(payload = {}, options = {}) {
+  const res = await fetch(`${API}/favorites/`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    signal: options.signal,
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) {
+    let text = `Failed to create favorite: ${res.status}`;
+    try {
+      const j = await res.json();
+      if (j?.detail) text = `${text} - ${j.detail}`;
+    } catch {
+      /* empty */
+    }
+    throw new Error(text);
+  }
+  return res.json();
+}
+
+export async function deleteFavorite(id, options = {}) {
+  const res = await fetch(`${API}/favorites/${id}`, {
+    method: "DELETE",
+    signal: options.signal,
+  });
+  if (!res.ok)
+    throw new Error(`Failed to delete favorite ${id}: ${res.status}`);
+  return res.json();
+}
+
+export async function fetchUsers(options = {}) {
+  const res = await fetch(`${API}/users/`, { signal: options.signal });
+  if (!res.ok) throw new Error(`Failed to fetch users: ${res.status}`);
+  return res.json();
+}
+
+export async function createUserApi(payload = {}, options = {}) {
+  const res = await fetch(`${API}/users/`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    signal: options.signal,
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) {
+    let text = `Failed to create user: ${res.status}`;
+    try {
+      const j = await res.json();
+      if (j?.detail) text = `${text} - ${j.detail}`;
+    } catch {
+      /* empty */
+    }
+    throw new Error(text);
+  }
+  return res.json();
+}

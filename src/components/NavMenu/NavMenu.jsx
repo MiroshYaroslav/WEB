@@ -1,11 +1,16 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import AuthModal from "../AuthModal/AuthModal";
 import "./NavMenu.css";
 import { fetchCategories } from "../../utils/api";
 
 const NavMenu = () => {
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef(null);
+  const [isAuthOpen, setIsAuthOpen] = useState(false);
+
+  const currentUser = useSelector((s) => s.auth.currentUser);
 
   const [categories, setCategories] = useState([]);
   const [loadingCategories, setLoadingCategories] = useState(false);
@@ -49,10 +54,6 @@ const NavMenu = () => {
 
   return (
     <nav className="nav" ref={dropdownRef}>
-      <Link to="/" className="nav-link">
-        Home
-      </Link>
-
       <div className="catalog-dropdown">
         <i
           className={`nav-link catalog-btn ${showDropdown ? "active" : ""}`}
@@ -82,6 +83,18 @@ const NavMenu = () => {
           )}
         </div>
       </div>
+
+      {currentUser && (
+        <Link to="/favorites" className="nav-link">
+          Favorites
+        </Link>
+      )}
+
+      <button className="nav-link" onClick={() => setIsAuthOpen(true)}>
+        {currentUser ? (currentUser.username ?? "Account") : "Account"}
+      </button>
+
+      <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} />
     </nav>
   );
 };

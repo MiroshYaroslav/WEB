@@ -1,5 +1,7 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { addToFavorites, removeFromFavorites } from "../../redux/actions";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   fetchCategories,
@@ -9,9 +11,15 @@ import {
 } from "../../utils/api";
 import ContactModal from "../../components/ContactModal/ContactModal.jsx";
 import "./ProductPage.css";
+import BackLink from "../../utils/BackButton.jsx";
+import Loader from "../../components/Loader/Loader.jsx";
 
 const ProductPage = () => {
   const { id } = useParams();
+  const dispatch = useDispatch();
+  const currentUser = useSelector((s) => s.auth.currentUser);
+  const favorites = useSelector((s) => s.favorites.items);
+
   const [product, setProduct] = useState(null);
   const [reviews, setReviews] = useState([]);
   const [categoriesMap, setCategoriesMap] = useState({});
@@ -125,7 +133,6 @@ const ProductPage = () => {
     };
 
     loadProductAndMeta();
-
     return () => controller.abort();
   }, [id]);
 
@@ -135,9 +142,7 @@ const ProductPage = () => {
         if (isImageOpen) setIsImageOpen(false);
       }
     };
-    if (isImageOpen) {
-      window.addEventListener("keydown", onKeyDown);
-    }
+    if (isImageOpen) window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [isImageOpen]);
 
@@ -184,21 +189,18 @@ const ProductPage = () => {
     }
   };
 
-  if (loading) {
+  if (loading)
     return (
       <section className="section container">
-        <p>Loading product...</p>
+        <Loader />
       </section>
     );
-  }
-
-  if (error || !product) {
+  if (error || !product)
     return (
       <section className="section container">
         <h2>{error || "Product not found."}</h2>
       </section>
     );
-  }
 
   const specs = [
     { label: "Power", value: product.power ? `${product.power} HP` : "" },
@@ -222,8 +224,12 @@ const ProductPage = () => {
   const imageSrc = product.image
     ? `http://localhost:8000${product.image}`
     : "/image-car/placeholder.png";
+
   return (
     <section className="section container product-page-container">
+      <div className="page-header">
+        <BackLink />
+      </div>
       <motion.div
         className="product-page"
         initial={{ opacity: 0, y: 40 }}
@@ -264,12 +270,47 @@ const ProductPage = () => {
 
           <p className="product-price">${product.price}</p>
 
-          <button
-            className="btn contact-btn"
-            onClick={() => setIsContactOpen(true)}
-          >
-            Call / Contact
-          </button>
+          <div className="product-buttons">
+            <button
+              className="btn contact-btn"
+              onClick={() => setIsContactOpen(true)}
+            >
+              Call / Contact
+            </button>
+            {currentUser?.id && (
+              <button
+                className={`product-fav-btn ${favorites.some((f) => f.product_id === product.id) ? "active" : ""}`}
+                aria-pressed={favorites.some(
+                  (f) => f.product_id === product.id,
+                )}
+                aria-label={
+                  favorites.some((f) => f.product_id === product.id)
+                    ? "Remove from favorites"
+                    : "Add to favorites"
+                }
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  const fav = favorites.find(
+                    (f) => f.product_id === product.id,
+                  );
+                  if (fav)
+                    dispatch(removeFromFavorites({ favoriteId: fav.id }));
+                  else
+                    dispatch(
+                      addToFavorites({
+                        userId: currentUser.id,
+                        productId: product.id,
+                      }),
+                    );
+                }}
+              >
+                {favorites.some((f) => f.product_id === product.id)
+                  ? "❤"
+                  : "♡"}
+              </button>
+            )}
+          </div>
         </motion.div>
       </motion.div>
 
@@ -281,7 +322,6 @@ const ProductPage = () => {
         viewport={{ once: true }}
       >
         <h2>Customer Reviews</h2>
-
         <form className="review-form" onSubmit={handleSubmit}>
           <div className="form-row">
             <input
@@ -292,16 +332,13 @@ const ProductPage = () => {
               aria-label="Your name"
               disabled={submitLoading}
             />
-
             <div className="rating-stars" role="radiogroup" aria-label="Rating">
               {[1, 2, 3, 4, 5].map((v) => (
                 <StarButton key={v} value={v} />
               ))}
             </div>
           </div>
-
           <input type="hidden" name="rating" value={form.rating} />
-
           <textarea
             name="comment"
             value={form.comment}

@@ -39,6 +39,41 @@
   display: block;
 }
 
+.image-wrap {
+  position: relative;
+}
+
+.fav-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 2;
+  width: 36px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(0, 0, 0, 0.45);
+  color: #fff;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  transition:
+    background 0.2s ease,
+    transform 0.1s ease;
+}
+
+.fav-btn:hover {
+  background: rgba(0, 0, 0, 0.65);
+}
+
+.fav-btn.active {
+  color: #ff5a7a;
+  border-color: rgba(255, 90, 122, 0.6);
+  background: rgba(255, 90, 122, 0.12);
+}
+
 .product-card h3 {
   margin: 1rem 0 0.5rem 0;
 }

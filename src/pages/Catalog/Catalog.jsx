@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import ProductCard from "../../components/ProductCard/ProductCard.jsx";
 import FiltersPanel from "../../components/FiltersPanel/FiltersPanel.jsx";
 import "./Catalog.css";
 import { fetchCategories, fetchProducts } from "../../utils/api";
+import BackLink from "../../utils/BackButton.jsx";
+import Loader from "../../components/Loader/Loader.jsx";
 
 const Catalog = () => {
   const { category } = useParams();
@@ -74,9 +76,7 @@ const Catalog = () => {
 
   return (
     <section className="catalog-page container">
-      <Link to="/" className="back-btn">
-        ← Back to Home
-      </Link>
+      <BackLink />
 
       <h1 className="catalog-title">
         {categoryObj ? categoryObj.name.toUpperCase() : "All Cars"}
@@ -90,7 +90,12 @@ const Catalog = () => {
         categoriesList={categoriesList}
       />
 
-      {loading && <p className="loading">Loading products...</p>}
+      {loading && (
+        <div className="loading-container">
+          <Loader />
+        </div>
+      )}
+
       {error && <p className="error-text">{error}</p>}
       {!loading && products.length === 0 && (
         <p className="no-products">No products found.</p>

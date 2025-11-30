@@ -64,6 +64,8 @@
 .product-buttons {
   display: flex;
   gap: 1rem;
+  align-items: center;
+  justify-content: flex-start;
   margin-top: 0.5rem;
 }
 
@@ -267,4 +269,73 @@
   align-items: center;
   height: 100%;
   text-align: center;
+}
+
+.product-image {
+  position: relative;
+}
+
+.product-buttons {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  justify-content: flex-start;
+  margin-top: 0.5rem;
+}
+
+.product-fav-btn {
+  width: 36px;
+  height: 40px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(0, 0, 0, 0.45);
+  color: #fff;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  transition:
+    background 0.2s ease,
+    transform 0.1s ease;
+}
+
+.product-fav-btn.active {
+  color: #ff5a7a;
+  border-color: rgba(255, 90, 122, 0.6);
+  background: rgba(255, 90, 122, 0.12);
+}
+
+.product-fav-btn:hover {
+  background: rgba(0, 0, 0, 0.65);
+}
+
+.product-fav-btn.active {
+  color: #ff5a7a;
+  border-color: rgba(255, 90, 122, 0.6);
+  background: rgba(255, 90, 122, 0.12);
+}
+
+.page-header {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.page-header .back-btn {
+  position: relative;
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--color-accent);
+  text-decoration: none;
+  transition:
+    color 0.3s,
+    transform 0.2s;
+  margin-right: 1rem;
+  margin-top: -30px;
+}
+
+.page-header .back-btn:hover {
+  color: var(--color-accent-hover);
+  transform: translateX(-4px);
 }

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import FiltersPanel from "../FiltersPanel/FiltersPanel.jsx";
 import "./FeaturedProducts.css";
 import { fetchCategories, fetchProducts } from "../../utils/api";
+import Loader from "../Loader/Loader.jsx";
 
 const FeaturedProducts = () => {
   const [products, setProducts] = useState([]);
@@ -78,7 +79,12 @@ const FeaturedProducts = () => {
         categoriesList={categoriesList}
       />
 
-      {loading && <p className="loading">Loading models...</p>}
+      {loading && (
+        <div className="loading-container">
+          <Loader />
+        </div>
+      )}
+
       {error && <p className="error-text">{error}</p>}
 
       <motion.div className="products-grid">
