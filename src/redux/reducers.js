@@ -19,9 +19,7 @@ function auth(state = initialAuth, action) {
       try {
         if (user) localStorage.setItem("currentUser", JSON.stringify(user));
         else localStorage.removeItem("currentUser");
-      } catch {
-        // ignore
-      }
+      } catch { /* empty */ }
       return { ...state, currentUser: user };
     }
     default:

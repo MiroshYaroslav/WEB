@@ -1,4 +1,8 @@
+import axios from "axios";
+
 const API = import.meta.env.VITE_API_URL || "http://localhost:8000";
+
+const http = axios.create({ baseURL: API });
 
 function buildQuery(params = {}) {
   const qp = new URLSearchParams();
@@ -9,125 +13,141 @@ function buildQuery(params = {}) {
   return qp.toString();
 }
 
+function toAbortError() {
+  const err = new Error("Aborted");
+  err.name = "AbortError";
+  return err;
+}
+
+function normalizeAndThrow(e, fallback) {
+  // Map axios cancel to AbortError
+  if (e?.code === "ERR_CANCELED" || e?.name === "CanceledError") {
+    throw toAbortError();
+  }
+  // Prefer server-provided detail if any
+  const detail = e?.response?.data?.detail;
+  const status = e?.response?.status;
+  const base = fallback || e?.message || "Request failed";
+  const msg = detail ? `${base} - ${detail}` : status ? `${base}: ${status}` : base;
+  const err = new Error(msg);
+  throw err;
+}
+
 export async function fetchProducts(params = {}, options = {}) {
   const qs = buildQuery(params);
-  const res = await fetch(`${API}/products${qs ? `?${qs}` : ""}`, {
-    signal: options.signal,
-  });
-  if (!res.ok) throw new Error(`Failed to fetch products: ${res.status}`);
-  return res.json();
+  try {
+    const res = await http.get(`/products${qs ? `?${qs}` : ""}`, {
+      signal: options.signal,
+    });
+    return res.data;
+  } catch (e) {
+    normalizeAndThrow(e, "Failed to fetch products");
+  }
 }
 
 export async function fetchProductById(id, options = {}) {
-  const res = await fetch(`${API}/products/${id}`, { signal: options.signal });
-  if (!res.ok) throw new Error(`Failed to fetch product ${id}: ${res.status}`);
-  return res.json();
+  try {
+    const res = await http.get(`/products/${id}`, { signal: options.signal });
+    return res.data;
+  } catch (e) {
+    normalizeAndThrow(e, `Failed to fetch product ${id}`);
+  }
 }
 
 export async function fetchCategories(options = {}) {
-  const res = await fetch(`${API}/categories`, { signal: options.signal });
-  if (!res.ok) throw new Error(`Failed to fetch categories: ${res.status}`);
-  return res.json();
+  try {
+    const res = await http.get(`/categories`, { signal: options.signal });
+    return res.data;
+  } catch (e) {
+    normalizeAndThrow(e, "Failed to fetch categories");
+  }
 }
 
 export async function fetchReviews(productId = undefined, options = {}) {
   const qs = buildQuery({ product_id: productId });
-  const res = await fetch(`${API}/reviews${qs ? `?${qs}` : ""}`, {
-    signal: options.signal,
-  });
-  if (!res.ok) throw new Error(`Failed to fetch reviews: ${res.status}`);
-  return res.json();
+  try {
+    const res = await http.get(`/reviews${qs ? `?${qs}` : ""}`, {
+      signal: options.signal,
+    });
+    return res.data;
+  } catch (e) {
+    normalizeAndThrow(e, "Failed to fetch reviews");
+  }
 }
 
 export async function postReview(payload = {}, options = {}) {
-  const res = await fetch(`${API}/reviews/`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    signal: options.signal,
-    body: JSON.stringify(payload),
-  });
-  if (!res.ok) {
-    let text = `Failed to post review: ${res.status}`;
-    try {
-      const j = await res.json();
-      if (j?.detail) text = `${text} - ${j.detail}`;
-    } catch {
-      /* empty */
-    }
-    throw new Error(text);
+  try {
+    const res = await http.post(`/reviews/`, payload, {
+      signal: options.signal,
+      headers: { "Content-Type": "application/json" },
+    });
+    return res.data;
+  } catch (e) {
+    normalizeAndThrow(e, "Failed to post review");
   }
-  return res.json();
 }
 
 export async function fetchPhoneNumbers(options = {}) {
-  const res = await fetch(`${API}/phone-numbers/`, { signal: options.signal });
-  if (!res.ok) throw new Error(`Failed to fetch phone numbers: ${res.status}`);
-  return res.json();
+  try {
+    const res = await http.get(`/phone-numbers/`, { signal: options.signal });
+    return res.data;
+  } catch (e) {
+    normalizeAndThrow(e, "Failed to fetch phone numbers");
+  }
 }
 
 export async function fetchFavorites(params = {}, options = {}) {
   const qs = buildQuery(params);
-  const res = await fetch(`${API}/favorites${qs ? `?${qs}` : ""}`, {
-    signal: options.signal,
-  });
-  if (!res.ok) throw new Error(`Failed to fetch favorites: ${res.status}`);
-  return res.json();
+  try {
+    const res = await http.get(`/favorites${qs ? `?${qs}` : ""}`, {
+      signal: options.signal,
+    });
+    return res.data;
+  } catch (e) {
+    normalizeAndThrow(e, "Failed to fetch favorites");
+  }
 }
 
 export async function createFavorite(payload = {}, options = {}) {
-  const res = await fetch(`${API}/favorites/`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    signal: options.signal,
-    body: JSON.stringify(payload),
-  });
-  if (!res.ok) {
-    let text = `Failed to create favorite: ${res.status}`;
-    try {
-      const j = await res.json();
-      if (j?.detail) text = `${text} - ${j.detail}`;
-    } catch {
-      /* empty */
-    }
-    throw new Error(text);
+  try {
+    const res = await http.post(`/favorites/`, payload, {
+      signal: options.signal,
+      headers: { "Content-Type": "application/json" },
+    });
+    return res.data;
+  } catch (e) {
+    normalizeAndThrow(e, "Failed to create favorite");
   }
-  return res.json();
 }
 
 export async function deleteFavorite(id, options = {}) {
-  const res = await fetch(`${API}/favorites/${id}`, {
-    method: "DELETE",
-    signal: options.signal,
-  });
-  if (!res.ok)
-    throw new Error(`Failed to delete favorite ${id}: ${res.status}`);
-  return res.json();
+  try {
+    const res = await http.delete(`/favorites/${id}`, {
+      signal: options.signal,
+    });
+    return res.data ?? { success: true };
+  } catch (e) {
+    normalizeAndThrow(e, `Failed to delete favorite ${id}`);
+  }
 }
 
 export async function fetchUsers(options = {}) {
-  const res = await fetch(`${API}/users/`, { signal: options.signal });
-  if (!res.ok) throw new Error(`Failed to fetch users: ${res.status}`);
-  return res.json();
+  try {
+    const res = await http.get(`/users/`, { signal: options.signal });
+    return res.data;
+  } catch (e) {
+    normalizeAndThrow(e, "Failed to fetch users");
+  }
 }
 
 export async function createUserApi(payload = {}, options = {}) {
-  const res = await fetch(`${API}/users/`, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    signal: options.signal,
-    body: JSON.stringify(payload),
-  });
-  if (!res.ok) {
-    let text = `Failed to create user: ${res.status}`;
-    try {
-      const j = await res.json();
-      if (j?.detail) text = `${text} - ${j.detail}`;
-    } catch {
-      /* empty */
-    }
-    throw new Error(text);
+  try {
+    const res = await http.post(`/users/`, payload, {
+      signal: options.signal,
+      headers: { "Content-Type": "application/json" },
+    });
+    return res.data;
+  } catch (e) {
+    normalizeAndThrow(e, "Failed to create user");
   }
-  return res.json();
 }
