@@ -1,28 +1,28 @@
 .catalog-page {
-    text-align: center;
+  text-align: center;
 }
 
 .catalog-title {
-    font-size: 2.2rem;
-    font-weight: 700;
-    color: var(--color-accent);
-    text-transform: uppercase;
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--color-accent);
+  text-transform: uppercase;
 }
 
 .no-products {
-    color: #aaa;
-    font-size: 1.05rem;
-    margin-top: 1.5rem;
+  color: #aaa;
+  font-size: 1.05rem;
+  margin-top: 1.5rem;
 }
 
 @media (max-width: 768px) {
-    .back-btn {
-        top: 1.5rem;
-        left: 1.5rem;
-        font-size: 0.95rem;
-    }
+  .back-btn {
+    top: 1.5rem;
+    left: 1.5rem;
+    font-size: 0.95rem;
+  }
 
-    .catalog-title {
-        font-size: 1.7rem;
-    }
+  .catalog-title {
+    font-size: 1.7rem;
+  }
 }

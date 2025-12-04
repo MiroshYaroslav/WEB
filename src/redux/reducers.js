@@ -1,17 +1,17 @@
-import {combineReducers} from "redux";
+import { combineReducers } from "redux";
 import {
-    CART_ADD,
-    CART_FAILURE,
-    CART_REMOVE,
-    CART_REQUEST,
-    CART_SET,
-    CART_UPDATE,
-    FAV_ADD,
-    FAV_FAILURE,
-    FAV_REMOVE,
-    FAV_REQUEST,
-    FAV_SET,
-    SET_CURRENT_USER,
+  CART_ADD,
+  CART_FAILURE,
+  CART_REMOVE,
+  CART_REQUEST,
+  CART_SET,
+  CART_UPDATE,
+  FAV_ADD,
+  FAV_FAILURE,
+  FAV_REMOVE,
+  FAV_REQUEST,
+  FAV_SET,
+  SET_CURRENT_USER,
 } from "./actions";
 
 const initialAuth = {
