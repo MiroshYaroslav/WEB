@@ -8,6 +8,7 @@ import Catalog from "./pages/Catalog/Catalog.jsx";
 import ProductPage from "./pages/ProductPage/ProductPage.jsx";
 import Footer from "./components/Footer/Footer";
 import Favorites from "./pages/Favorites/Favorites.jsx";
+import Cart from "./pages/Cart/Cart.jsx";
 
 function App() {
   const dispatch = useDispatch();
@@ -28,6 +29,7 @@ function App() {
           <Route path="/catalog/:category" element={<Catalog />} />
           <Route path="/product/:id" element={<ProductPage />} />
           <Route path="/favorites" element={<Favorites />} />
+          <Route path="/cart" element={<Cart />} />
 
           <Route
             path="*"

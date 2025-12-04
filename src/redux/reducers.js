@@ -1,5 +1,11 @@
 import { combineReducers } from "redux";
 import {
+  CART_ADD,
+  CART_FAILURE,
+  CART_REMOVE,
+  CART_REQUEST,
+  CART_SET,
+  CART_UPDATE,
   FAV_ADD,
   FAV_FAILURE,
   FAV_REMOVE,
@@ -19,7 +25,9 @@ function auth(state = initialAuth, action) {
       try {
         if (user) localStorage.setItem("currentUser", JSON.stringify(user));
         else localStorage.removeItem("currentUser");
-      } catch { /* empty */ }
+      } catch {
+        /* empty */
+      }
       return { ...state, currentUser: user };
     }
     default:
@@ -59,14 +67,51 @@ function favorites(state = initialFav, action) {
         items: state.items.filter((f) => f.id !== action.payload),
       };
     case SET_CURRENT_USER:
-      if (!action.payload) {
-        return { ...initialFav };
-      }
+      if (!action.payload) return { ...initialFav };
       return state;
     default:
       return state;
   }
 }
 
-const rootReducer = combineReducers({ auth, favorites });
-export default rootReducer;
+const initialCart = { items: [], loading: false, error: "" };
+
+function cart(state = initialCart, action) {
+  switch (action.type) {
+    case CART_REQUEST:
+      return { ...state, loading: true, error: "" };
+    case CART_FAILURE:
+      return { ...state, loading: false, error: action.error || "" };
+    case CART_SET:
+      return { ...state, loading: false, items: action.payload || [] };
+    case CART_ADD:
+      return {
+        ...state,
+        loading: false,
+        items: [action.payload, ...state.items],
+      };
+    case CART_UPDATE:
+      return {
+        ...state,
+        loading: false,
+        items: state.items.map((it) =>
+          it.id === action.payload.id ? action.payload : it,
+        ),
+      };
+    case CART_REMOVE:
+      return {
+        ...state,
+        loading: false, // зупиняємо loader
+        items: state.items.filter((it) => it.id !== action.payload),
+      };
+
+    default:
+      return state;
+  }
+}
+
+export default combineReducers({
+  auth,
+  favorites,
+  cart,
+});

@@ -85,9 +85,14 @@ const NavMenu = () => {
       </div>
 
       {currentUser && (
-        <Link to="/favorites" className="nav-link">
-          Favorites
-        </Link>
+        <>
+          <Link to="/favorites" className="nav-link">
+            Favorites
+          </Link>
+          <Link to="/cart" className="nav-link">
+            Cart
+          </Link>
+        </>
       )}
 
       <button className="nav-link" onClick={() => setIsAuthOpen(true)}>

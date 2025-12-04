@@ -20,15 +20,17 @@ function toAbortError() {
 }
 
 function normalizeAndThrow(e, fallback) {
-  // Map axios cancel to AbortError
   if (e?.code === "ERR_CANCELED" || e?.name === "CanceledError") {
     throw toAbortError();
   }
-  // Prefer server-provided detail if any
   const detail = e?.response?.data?.detail;
   const status = e?.response?.status;
   const base = fallback || e?.message || "Request failed";
-  const msg = detail ? `${base} - ${detail}` : status ? `${base}: ${status}` : base;
+  const msg = detail
+    ? `${base} - ${detail}`
+    : status
+      ? `${base}: ${status}`
+      : base;
   const err = new Error(msg);
   throw err;
 }
@@ -149,5 +151,74 @@ export async function createUserApi(payload = {}, options = {}) {
     return res.data;
   } catch (e) {
     normalizeAndThrow(e, "Failed to create user");
+  }
+}
+
+export async function fetchCartItems(params = {}, options = {}) {
+  const qs = buildQuery(params);
+  try {
+    const res = await http.get(`/cart${qs ? `?${qs}` : ""}`, {
+      signal: options.signal,
+    });
+    return res.data;
+  } catch (e) {
+    normalizeAndThrow(e, "Failed to fetch cart items");
+  }
+}
+
+export async function createCartItem(payload = {}, options = {}) {
+  try {
+    const res = await http.post(`/cart/`, payload, {
+      signal: options.signal,
+      headers: { "Content-Type": "application/json" },
+    });
+    return res.data;
+  } catch (e) {
+    normalizeAndThrow(e, "Failed to create cart item");
+  }
+}
+
+export async function updateCartItem(id, payload = {}, options = {}) {
+  try {
+    const res = await http.patch(`/cart/${id}`, payload, {
+      signal: options.signal,
+      headers: { "Content-Type": "application/json" },
+    });
+    return res.data;
+  } catch (e) {
+    normalizeAndThrow(e, `Failed to update cart item ${id}`);
+  }
+}
+
+export async function deleteCartItem(id, options = {}) {
+  try {
+    const res = await http.delete(`/cart/${id}`, {
+      signal: options.signal,
+    });
+    return res.data ?? { success: true };
+  } catch (e) {
+    normalizeAndThrow(e, `Failed to delete cart item ${id}`);
+  }
+}
+
+export async function createCartItemAPI(payload = {}) {
+  try {
+    const res = await http.post("/cart/", payload, {
+      headers: { "Content-Type": "application/json" },
+    });
+    return res.data;
+  } catch (e) {
+    normalizeAndThrow(e, "Failed to add to cart");
+  }
+}
+
+export async function updateCartItemAPI(id, payload = {}) {
+  try {
+    const res = await http.patch(`/cart/${id}/`, payload, {
+      headers: { "Content-Type": "application/json" },
+    });
+    return res.data;
+  } catch (e) {
+    normalizeAndThrow(e, "Failed to update cart item");
   }
 }

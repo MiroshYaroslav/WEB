@@ -1,24 +1,32 @@
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addToFavorites, removeFromFavorites } from "../../redux/actions";
-import { AnimatePresence, motion } from "framer-motion";
+import {
+  addToCart,
+  addToFavorites,
+  loadCart,
+  removeFromFavorites,
+} from "../../redux/actions";
 import {
   fetchCategories,
   fetchProductById,
   fetchReviews,
   postReview,
 } from "../../utils/api";
+import { AnimatePresence, motion } from "framer-motion";
+
 import ContactModal from "../../components/ContactModal/ContactModal.jsx";
-import "./ProductPage.css";
 import BackLink from "../../utils/BackButton.jsx";
 import Loader from "../../components/Loader/Loader.jsx";
+import "./ProductPage.css";
 
 const ProductPage = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
+
   const currentUser = useSelector((s) => s.auth.currentUser);
   const favorites = useSelector((s) => s.favorites.items);
+  const cartItems = useSelector((s) => s.cart.items);
 
   const [product, setProduct] = useState(null);
   const [reviews, setReviews] = useState([]);
@@ -32,14 +40,12 @@ const ProductPage = () => {
   const [submitLoading, setSubmitLoading] = useState(false);
   const [submitError, setSubmitError] = useState("");
   const [submitSuccess, setSubmitSuccess] = useState("");
-
   const [hoverRating, setHoverRating] = useState(0);
 
   const formatDate = (iso) => {
+    if (!iso) return "";
     try {
-      if (!iso) return "";
-      const d = new Date(iso);
-      return d.toLocaleString(undefined, {
+      return new Date(iso).toLocaleString(undefined, {
         year: "numeric",
         month: "short",
         day: "numeric",
@@ -47,27 +53,19 @@ const ProductPage = () => {
         minute: "2-digit",
       });
     } catch {
-      return iso ?? "";
+      return iso;
     }
   };
 
   const renderStars = (rating) => {
     const r = Number(rating) || 0;
-    const stars = [];
-    for (let i = 1; i <= 5; i++) {
-      stars.push(
-        <span
-          key={i}
-          className={`star ${i <= r ? "filled" : "empty"}`}
-          aria-hidden="true"
-        >
-          ★
-        </span>,
-      );
-    }
     return (
       <span className="stars" aria-label={`Rating ${r} of 5`}>
-        {stars}
+        {[1, 2, 3, 4, 5].map((i) => (
+          <span key={i} className={`star ${i <= r ? "filled" : "empty"}`}>
+            ★
+          </span>
+        ))}
       </span>
     );
   };
@@ -104,7 +102,7 @@ const ProductPage = () => {
     setError("");
     window.scrollTo(0, 0);
 
-    const loadProductAndMeta = async () => {
+    const loadData = async () => {
       try {
         const prod = await fetchProductById(id, { signal: controller.signal });
         setProduct(prod);
@@ -115,9 +113,7 @@ const ProductPage = () => {
         const cats = await fetchCategories({ signal: controller.signal });
         if (Array.isArray(cats)) {
           const map = {};
-          cats.forEach((c) => {
-            map[c.id] = c.name;
-          });
+          cats.forEach((c) => (map[c.id] = c.name));
           setCategoriesMap(map);
         }
       } catch (err) {
@@ -132,19 +128,23 @@ const ProductPage = () => {
       }
     };
 
-    loadProductAndMeta();
+    loadData();
     return () => controller.abort();
   }, [id]);
 
   useEffect(() => {
     const onKeyDown = (e) => {
-      if (e.key === "Escape") {
-        if (isImageOpen) setIsImageOpen(false);
-      }
+      if (e.key === "Escape" && isImageOpen) setIsImageOpen(false);
     };
     if (isImageOpen) window.addEventListener("keydown", onKeyDown);
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [isImageOpen]);
+
+  useEffect(() => {
+    if (currentUser?.id && cartItems.length === 0) {
+      dispatch(loadCart(currentUser.id));
+    }
+  }, [currentUser?.id, cartItems.length, dispatch]);
 
   const handleFormChange = (e) => {
     const { name, value } = e.target;
@@ -173,10 +173,9 @@ const ProductPage = () => {
       comment: form.comment.trim() || null,
     };
 
-    const controller = new AbortController();
     setSubmitLoading(true);
     try {
-      const created = await postReview(payload, { signal: controller.signal });
+      const created = await postReview(payload);
       setReviews((r) => [created, ...r]);
       setForm({ username: "", rating: "5", comment: "" });
       setSubmitSuccess("Review submitted.");
@@ -195,6 +194,7 @@ const ProductPage = () => {
         <Loader />
       </section>
     );
+
   if (error || !product)
     return (
       <section className="section container">
@@ -225,11 +225,16 @@ const ProductPage = () => {
     ? `http://localhost:8000${product.image}`
     : "/image-car/placeholder.png";
 
+  const isFavorited = favorites.some((f) => f.product_id === product.id);
+  const cartQty =
+    cartItems.find((item) => item.product_id === product.id)?.quantity || 0;
+
   return (
     <section className="section container product-page-container">
       <div className="page-header">
         <BackLink />
       </div>
+
       <motion.div
         className="product-page"
         initial={{ opacity: 0, y: 40 }}
@@ -277,38 +282,52 @@ const ProductPage = () => {
             >
               Call / Contact
             </button>
+
             {currentUser?.id && (
-              <button
-                className={`product-fav-btn ${favorites.some((f) => f.product_id === product.id) ? "active" : ""}`}
-                aria-pressed={favorites.some(
-                  (f) => f.product_id === product.id,
-                )}
-                aria-label={
-                  favorites.some((f) => f.product_id === product.id)
-                    ? "Remove from favorites"
-                    : "Add to favorites"
-                }
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  const fav = favorites.find(
-                    (f) => f.product_id === product.id,
-                  );
-                  if (fav)
-                    dispatch(removeFromFavorites({ favoriteId: fav.id }));
-                  else
+              <>
+                <button
+                  className="btn add-to-cart"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
                     dispatch(
-                      addToFavorites({
+                      addToCart({
                         userId: currentUser.id,
                         productId: product.id,
+                        quantity: 1,
                       }),
                     );
-                }}
-              >
-                {favorites.some((f) => f.product_id === product.id)
-                  ? "❤"
-                  : "♡"}
-              </button>
+                  }}
+                >
+                  Add to cart
+                  {cartQty > 0 && (
+                    <span className="cart-counter">{cartQty}</span>
+                  )}
+                </button>
+
+                <button
+                  className={`product-fav-btn ${isFavorited ? "active" : ""}`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    if (isFavorited) {
+                      const fav = favorites.find(
+                        (f) => f.product_id === product.id,
+                      );
+                      dispatch(removeFromFavorites({ favoriteId: fav.id }));
+                    } else {
+                      dispatch(
+                        addToFavorites({
+                          userId: currentUser.id,
+                          productId: product.id,
+                        }),
+                      );
+                    }
+                  }}
+                >
+                  {isFavorited ? "❤" : "♡"}
+                </button>
+              </>
             )}
           </div>
         </motion.div>
@@ -338,7 +357,6 @@ const ProductPage = () => {
               ))}
             </div>
           </div>
-          <input type="hidden" name="rating" value={form.rating} />
           <textarea
             name="comment"
             value={form.comment}
@@ -365,13 +383,7 @@ const ProductPage = () => {
         {reviews.length > 0 ? (
           reviews.map((r, i) => (
             <div key={r.id ?? i} className="review-card">
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                }}
-              >
+              <div className="review-header">
                 <h4>{r.username}</h4>
                 <div style={{ textAlign: "right" }}>
                   {renderStars(r.rating)}
