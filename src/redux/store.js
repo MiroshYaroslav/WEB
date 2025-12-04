@@ -1,22 +1,16 @@
 import { applyMiddleware, compose, createStore } from "redux";
 import { thunk } from "redux-thunk";
+import { persistReducer, persistStore } from "redux-persist";
+import storage from "redux-persist/lib/storage";
 import rootReducer from "./reducers";
 
-function loadUser() {
-  try {
-    const raw = localStorage.getItem("currentUser");
-    if (!raw) return null;
-    const parsed = JSON.parse(raw);
-    if (parsed && typeof parsed.id === "number") return parsed;
-    return null;
-  } catch {
-    return null;
-  }
-}
-
-const preloadedState = {
-  auth: { currentUser: loadUser() },
+const persistConfig = {
+  key: "root",
+  storage,
+  whitelist: ["auth", "cart", "favorites"],
 };
+
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 const composeEnhancers =
   typeof window !== "undefined" && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__
@@ -24,9 +18,10 @@ const composeEnhancers =
     : compose;
 
 const store = createStore(
-  rootReducer,
-  preloadedState,
+  persistedReducer,
   composeEnhancers(applyMiddleware(thunk)),
 );
+
+export const persistor = persistStore(store);
 
 export default store;

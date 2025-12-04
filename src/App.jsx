@@ -1,14 +1,15 @@
-import { Route, Routes } from "react-router-dom";
 import { useEffect } from "react";
+import { Route, Routes } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { loadFavorites } from "./redux/actions";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
 import Header from "./components/Header/Header";
+import Footer from "./components/Footer/Footer";
 import Home from "./pages/Home";
 import Catalog from "./pages/Catalog/Catalog.jsx";
 import ProductPage from "./pages/ProductPage/ProductPage.jsx";
-import Footer from "./components/Footer/Footer";
 import Favorites from "./pages/Favorites/Favorites.jsx";
 import Cart from "./pages/Cart/Cart.jsx";
 
@@ -48,7 +49,7 @@ function App() {
           <Route
             path="*"
             element={
-              <h2 style={{ textAlign: "center", margin: "2rem" }}>
+              <h2 style={{ textAlign: "center", margin: "4rem" }}>
                 Page not found
               </h2>
             }

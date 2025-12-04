@@ -1,14 +1,13 @@
+import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { useQuery } from "@tanstack/react-query"; // Import
 import ProductCard from "../ProductCard/ProductCard.jsx";
-import { useEffect, useState } from "react";
 import FiltersPanel from "../FiltersPanel/FiltersPanel.jsx";
-import "./FeaturedProducts.css";
-import { fetchCategories, fetchProducts } from "../../utils/api";
 import Loader from "../Loader/Loader.jsx";
+import { fetchCategories, fetchProducts } from "../../utils/api";
+import "./FeaturedProducts.css";
 
 const FeaturedProducts = () => {
-  const [products, setProducts] = useState([]);
-  const [categoriesList, setCategoriesList] = useState([]);
   const [visibleCount, setVisibleCount] = useState(4);
   const [searchTerm, setSearchTerm] = useState("");
   const [filters, setFilters] = useState({
@@ -17,43 +16,31 @@ const FeaturedProducts = () => {
     sort: "",
   });
 
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const { data: categoriesList = [] } = useQuery({
+    queryKey: ["categories"],
+    queryFn: fetchCategories,
+    staleTime: 1000 * 60 * 60,
+  });
 
-  useEffect(() => {
-    fetchCategories()
-      .then((data) => setCategoriesList(data))
-      .catch(console.error);
-  }, []);
+  const queryParams = {
+    search: searchTerm || undefined,
+    min_price: filters.priceRange.min || undefined,
+    max_price: filters.priceRange.max || undefined,
+    sort: filters.sort || undefined,
+    category_id: filters.categories.length > 0 ? filters.categories : undefined,
+    limit: 200,
+  };
 
-  useEffect(() => {
-    const controller = new AbortController();
-    setLoading(true);
-    setError("");
-
-    const params = {
-      search: searchTerm || undefined,
-      min_price: filters.priceRange.min || undefined,
-      max_price: filters.priceRange.max || undefined,
-      sort: filters.sort || undefined,
-      category_id:
-        filters.categories.length > 0 ? filters.categories : undefined,
-      limit: 200,
-    };
-
-    fetchProducts(params, { signal: controller.signal })
-      .then((data) => setProducts(Array.isArray(data) ? data : []))
-      .catch((err) => {
-        if (err.name !== "AbortError") {
-          console.error(err);
-          setError("Failed to load featured products.");
-          setProducts([]);
-        }
-      })
-      .finally(() => setLoading(false));
-
-    return () => controller.abort();
-  }, [searchTerm, filters]);
+  const {
+    data: products = [],
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ["featured_products", queryParams],
+    queryFn: () => fetchProducts(queryParams),
+    staleTime: 1000 * 60 * 5,
+  });
 
   const visibleProducts = products.slice(0, visibleCount);
 
@@ -79,13 +66,17 @@ const FeaturedProducts = () => {
         categoriesList={categoriesList}
       />
 
-      {loading && (
+      {isLoading && (
         <div className="loading-container">
           <Loader />
         </div>
       )}
 
-      {error && <p className="error-text">{error}</p>}
+      {isError && (
+        <p className="error-text">
+          {error?.message || "Failed to load featured products."}
+        </p>
+      )}
 
       <motion.div className="products-grid">
         <AnimatePresence>
@@ -101,13 +92,15 @@ const FeaturedProducts = () => {
                   <ProductCard product={product} />
                 </motion.div>
               ))
-            : !loading && <p className="no-results">No models found.</p>}
+            : !isLoading && <p className="no-results">No models found.</p>}
         </AnimatePresence>
       </motion.div>
 
-      <button className="view-more-btn" onClick={handleToggle}>
-        {visibleCount < products.length ? "View More" : "Show Less"}
-      </button>
+      {!isLoading && products.length > 4 && (
+        <button className="view-more-btn" onClick={handleToggle}>
+          {visibleCount < products.length ? "View More" : "Show Less"}
+        </button>
+      )}
     </motion.section>
   );
 };

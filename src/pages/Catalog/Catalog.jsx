@@ -1,19 +1,16 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
+import { useQuery } from "@tanstack/react-query"; // Import
 import ProductCard from "../../components/ProductCard/ProductCard.jsx";
 import FiltersPanel from "../../components/FiltersPanel/FiltersPanel.jsx";
-import "./Catalog.css";
-import { fetchCategories, fetchProducts } from "../../utils/api";
 import BackLink from "../../utils/BackButton.jsx";
 import Loader from "../../components/Loader/Loader.jsx";
+import { fetchCategories, fetchProducts } from "../../utils/api";
+import "./Catalog.css";
 
 const Catalog = () => {
   const { category } = useParams();
-  const [products, setProducts] = useState([]);
-  const [categoriesList, setCategoriesList] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
 
   const [searchTerm, setSearchTerm] = useState("");
   const [filters, setFilters] = useState({
@@ -23,11 +20,11 @@ const Catalog = () => {
 
   useEffect(() => window.scrollTo(0, 0), [category]);
 
-  useEffect(() => {
-    fetchCategories()
-      .then((data) => setCategoriesList(data))
-      .catch(console.error);
-  }, []);
+  const { data: categoriesList = [] } = useQuery({
+    queryKey: ["categories"],
+    queryFn: fetchCategories,
+    staleTime: 1000 * 60 * 60,
+  });
 
   function findCategoryByParam(list, param) {
     if (!param) return undefined;
@@ -41,46 +38,41 @@ const Catalog = () => {
     });
   }
 
-  useEffect(() => {
-    if (!categoriesList.length) return;
-
-    const categoryObj = findCategoryByParam(categoriesList, category);
-
-    const controller = new AbortController();
-    setLoading(true);
-    setError("");
-
-    const params = {
-      category_id: categoryObj?.id,
-      search: searchTerm || undefined,
-      min_price: filters.priceRange.min || undefined,
-      max_price: filters.priceRange.max || undefined,
-      sort: filters.sort || undefined,
-    };
-
-    fetchProducts(params, { signal: controller.signal })
-      .then((data) => setProducts(Array.isArray(data) ? data : []))
-      .catch((err) => {
-        if (err.name !== "AbortError") {
-          console.error(err);
-          setError("Failed to load products.");
-          setProducts([]);
-        }
-      })
-      .finally(() => setLoading(false));
-
-    return () => controller.abort();
-  }, [category, categoriesList, searchTerm, filters]);
-
   const categoryObj = findCategoryByParam(categoriesList, category);
 
-  return (
-    <section className="catalog-page container">
-      <BackLink />
+  const queryParams = {
+    category_id: categoryObj?.id,
+    search: searchTerm || undefined,
+    min_price: filters.priceRange.min || undefined,
+    max_price: filters.priceRange.max || undefined,
+    sort: filters.sort || undefined,
+  };
 
-      <h1 className="catalog-title">
-        {categoryObj ? categoryObj.name.toUpperCase() : "All Cars"}
-      </h1>
+  const {
+    data: products = [],
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ["products", queryParams],
+    queryFn: () => fetchProducts(queryParams),
+    enabled: true,
+    keepPreviousData: true,
+    staleTime: 1000 * 60 * 5,
+  });
+
+  return (
+    <section className="catalog-page container page-top-offset">
+      <div
+        className="page-header-wrapper"
+        style={{ justifyContent: "space-between" }}
+      >
+        <BackLink />
+        <h1 className="catalog-title">
+          {categoryObj ? categoryObj.name.toUpperCase() : "All Cars"}
+        </h1>
+        <div className="empty"></div>
+      </div>
 
       <FiltersPanel
         searchTerm={searchTerm}
@@ -90,14 +82,19 @@ const Catalog = () => {
         categoriesList={categoriesList}
       />
 
-      {loading && (
+      {isLoading && (
         <div className="loading-container">
           <Loader />
         </div>
       )}
 
-      {error && <p className="error-text">{error}</p>}
-      {!loading && products.length === 0 && (
+      {isError && (
+        <p className="error-text">
+          {error?.message || "Failed to load products."}
+        </p>
+      )}
+
+      {!isLoading && products.length === 0 && (
         <p className="no-products">No products found.</p>
       )}
 

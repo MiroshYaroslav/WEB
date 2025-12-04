@@ -1,17 +1,17 @@
-import { combineReducers } from "redux";
+import {combineReducers} from "redux";
 import {
-  CART_ADD,
-  CART_FAILURE,
-  CART_REMOVE,
-  CART_REQUEST,
-  CART_SET,
-  CART_UPDATE,
-  FAV_ADD,
-  FAV_FAILURE,
-  FAV_REMOVE,
-  FAV_REQUEST,
-  FAV_SET,
-  SET_CURRENT_USER,
+    CART_ADD,
+    CART_FAILURE,
+    CART_REMOVE,
+    CART_REQUEST,
+    CART_SET,
+    CART_UPDATE,
+    FAV_ADD,
+    FAV_FAILURE,
+    FAV_REMOVE,
+    FAV_REQUEST,
+    FAV_SET,
+    SET_CURRENT_USER,
 } from "./actions";
 
 const initialAuth = {
@@ -20,16 +20,8 @@ const initialAuth = {
 
 function auth(state = initialAuth, action) {
   switch (action.type) {
-    case SET_CURRENT_USER: {
-      const user = action.payload ?? null;
-      try {
-        if (user) localStorage.setItem("currentUser", JSON.stringify(user));
-        else localStorage.removeItem("currentUser");
-      } catch {
-        /* empty */
-      }
-      return { ...state, currentUser: user };
-    }
+    case SET_CURRENT_USER:
+      return { ...state, currentUser: action.payload ?? null };
     default:
       return state;
   }
@@ -101,7 +93,7 @@ function cart(state = initialCart, action) {
     case CART_REMOVE:
       return {
         ...state,
-        loading: false, // зупиняємо loader
+        loading: false,
         items: state.items.filter((it) => it.id !== action.payload),
       };
 

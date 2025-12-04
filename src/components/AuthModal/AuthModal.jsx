@@ -9,7 +9,7 @@ const AuthModal = ({ isOpen, onClose }) => {
   const dispatch = useDispatch();
   const currentUser = useSelector((s) => s.auth.currentUser);
 
-  const [tab, setTab] = useState("sign-in"); // "sign-in" | "sign-up"
+  const [tab, setTab] = useState("sign-in");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [users, setUsers] = useState([]);

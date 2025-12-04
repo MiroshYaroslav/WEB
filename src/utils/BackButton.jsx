@@ -10,7 +10,7 @@ const BackLink = () => {
         e.preventDefault();
         navigate(-1);
       }}
-      className="back-btn"
+      className="global-back-btn"
     >
       ← Back
     </a>

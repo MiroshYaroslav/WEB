@@ -8,7 +8,6 @@ const ProductCard = ({ product }) => {
   const currentUser = useSelector((s) => s.auth.currentUser);
   const favorites = useSelector((s) => s.favorites.items);
 
-  // Захист, якщо продукт ще не завантажився
   if (!product) return null;
 
   const imageSrc = product.image
@@ -30,12 +29,9 @@ const ProductCard = ({ product }) => {
     }
   };
 
-  // === НОВА ЛОГІКА ===
-  // Шукаємо базовий двигун (перший у списку)
   const baseEngine =
     product.engines && product.engines.length > 0 ? product.engines[0] : null;
 
-  // Беремо характеристики з двигуна, а не з продукту
   const power = baseEngine ? baseEngine.power : null;
 
   return (
@@ -59,20 +55,15 @@ const ProductCard = ({ product }) => {
 
       <h3>{product.name}</h3>
 
-      {/* Виводимо Power тільки якщо він є */}
       {power ? (
         <p className="power">Power: {power} hp</p>
       ) : (
         <p className="power" style={{ visibility: "hidden" }}>
           No specs
-        </p> // Щоб картка не стрибала по висоті
+        </p>
       )}
 
-      {/* Можна додати швидкість, якщо дозволяє дизайн */}
-      {/* {topSpeed && <p className="power">Speed: {topSpeed} km/h</p>} */}
-
       <div className="card-bottom">
-        {/* Форматуємо ціну з комами (наприклад 80,000) */}
         <span className="price">
           ${Number(product.base_price).toLocaleString()}
         </span>
