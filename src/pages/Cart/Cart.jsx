@@ -1,7 +1,6 @@
-import React, { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
-import { fetchProductById } from "../../utils/api";
+import { Link, useNavigate } from "react-router-dom";
 import {
   loadCart,
   removeFromCart,
@@ -18,44 +17,11 @@ const Cart = () => {
   const currentUser = useSelector((s) => s.auth.currentUser);
   const { items: cartItems, loading, error } = useSelector((s) => s.cart);
 
-  const productIds = useMemo(
-    () =>
-      Array.from(new Set(cartItems.map((c) => c.product_id))).filter(Boolean),
-    [cartItems],
-  );
-
-  const [products, setProducts] = React.useState([]);
-  const [fetchErr, setFetchErr] = React.useState("");
-  const [fetching, setFetching] = React.useState(false);
-
   useEffect(() => {
-    if (currentUser?.id) dispatch(loadCart(currentUser.id));
-  }, [currentUser?.id, dispatch]);
-
-  useEffect(() => {
-    if (!productIds.length) {
-      setProducts([]);
-      return;
+    if (currentUser?.id) {
+      dispatch(loadCart(currentUser.id));
     }
-
-    const controller = new AbortController();
-    setFetching(true);
-    setFetchErr("");
-
-    Promise.all(
-      productIds.map((id) =>
-        fetchProductById(id, { signal: controller.signal }).catch(() => null),
-      ),
-    )
-      .then((list) => setProducts(list.filter(Boolean)))
-      .catch((e) => {
-        if (e.name !== "AbortError")
-          setFetchErr("Failed to load cart products.");
-      })
-      .finally(() => setFetching(false));
-
-    return () => controller.abort();
-  }, [productIds]);
+  }, [currentUser?.id, dispatch]);
 
   if (!currentUser) {
     return (
@@ -72,7 +38,7 @@ const Cart = () => {
     );
   }
 
-  if (loading || fetching) {
+  if (loading && cartItems.length === 0) {
     return (
       <section className="container section">
         <Loader />
@@ -80,10 +46,16 @@ const Cart = () => {
     );
   }
 
-  const itemsWithProduct = cartItems.map((ci) => ({
-    cartItem: ci,
-    product: products.find((p) => p.id === ci.product_id) || null,
-  }));
+  // === ЛОГІКА РОЗРАХУНКУ ЦІНИ ===
+  const calculateItemPrice = (item) => {
+    // Ціна = База + Двигун + Колір + Пакет
+    const base = Number(item.product?.base_price) || 0;
+    const enginePrice = Number(item.engine?.price_modifier) || 0;
+    const colorPrice = Number(item.color?.price_modifier) || 0;
+    const trimPrice = Number(item.trim?.price_modifier) || 0;
+
+    return base + enginePrice + colorPrice + trimPrice;
+  };
 
   const handleRemove = (cartItemId) => {
     dispatch(removeFromCart({ cartItemId }));
@@ -94,9 +66,9 @@ const Cart = () => {
     dispatch(updateCartQuantity({ cartItemId, quantity: q }));
   };
 
-  const total = itemsWithProduct.reduce(
-    (sum, { cartItem, product }) =>
-      sum + (product?.price ?? 0) * (cartItem.quantity || 1),
+  // Рахуємо загальну суму всього кошика
+  const grandTotal = cartItems.reduce(
+    (sum, item) => sum + calculateItemPrice(item) * (item.quantity || 1),
     0,
   );
 
@@ -108,57 +80,121 @@ const Cart = () => {
       </div>
 
       {error && <p className="error-text">{error}</p>}
-      {fetchErr && <p className="error-text">{fetchErr}</p>}
 
-      {itemsWithProduct.length === 0 ? (
-        <p className="no-cart">Your cart is empty.</p>
+      {cartItems.length === 0 ? (
+        <div className="empty-cart">
+          <p>Your cart is empty.</p>
+          <button className="btn" onClick={() => navigate("/")}>
+            Go Shopping
+          </button>
+        </div>
       ) : (
         <>
           <div className="cart-list">
-            {itemsWithProduct.map(({ cartItem, product }) => (
-              <div key={cartItem.id} className="cart-row">
-                <div className="cart-image">
-                  <img
-                    src={
-                      product?.image
-                        ? `http://localhost:8000${product.image}`
-                        : "/image-car/placeholder.png"
-                    }
-                    alt={product?.name ?? `Product #${cartItem.product_id}`}
-                  />
-                </div>
-                <div className="cart-body">
-                  <h3>{product?.name ?? `Product #${cartItem.product_id}`}</h3>
-                  <p className="cart-price">${product?.price ?? "—"}</p>
-                  <div className="cart-actions">
-                    <label>
-                      Qty
-                      <input
-                        type="number"
-                        min="1"
-                        value={cartItem.quantity ?? 1}
-                        onChange={(e) =>
-                          handleChangeQty(cartItem.id, e.target.value)
-                        }
-                      />
-                    </label>
-                    <button
-                      className="btn"
-                      onClick={() => handleRemove(cartItem.id)}
-                    >
-                      Remove
-                    </button>
+            {cartItems.map((item) => {
+              const price = calculateItemPrice(item);
+              const product = item.product || {};
+
+              // Формуємо посилання на картинку (з машини або, якщо є, з кольору)
+              const imageSrc = product.image
+                ? `http://localhost:8000${product.image}`
+                : "/image-car/placeholder.png";
+
+              const productLink = `/product/${product.id || item.product_id}`;
+
+              return (
+                <div key={item.id} className="cart-row">
+                  {/* Фото */}
+                  <div className="cart-image">
+                    <Link to={productLink}>
+                      <img src={imageSrc} alt={product.name} />
+                    </Link>
+                  </div>
+
+                  {/* Інфо про машину та опції */}
+                  <div className="cart-details">
+                    <Link to={productLink} className="cart-item-title-link">
+                      <h3>{product.name}</h3>
+                    </Link>
+
+                    {/* Блок модифікацій */}
+                    <div className="cart-specs">
+                      {item.engine && (
+                        <div className="spec-tag" title="Engine">
+                          ⚙️ {item.engine.name}
+                        </div>
+                      )}
+                      {item.color && (
+                        <div className="spec-tag" title="Color">
+                          <span
+                            className="color-dot"
+                            style={{ backgroundColor: item.color.hex_code }}
+                          ></span>
+                          {item.color.name}
+                        </div>
+                      )}
+                      {item.trim && (
+                        <div className="spec-tag" title="Trim">
+                          ✨ {item.trim.name}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Ціна та Дії */}
+                  <div className="cart-right">
+                    <div className="cart-price-block">
+                      <span className="unit-price">
+                        ${price.toLocaleString()}
+                      </span>
+                      {item.quantity > 1 && (
+                        <span className="sub-total">
+                          Total: ${(price * item.quantity).toLocaleString()}
+                        </span>
+                      )}
+                    </div>
+
+                    <div className="cart-actions">
+                      <div className="qty-control">
+                        <button
+                          onClick={() =>
+                            handleChangeQty(item.id, item.quantity - 1)
+                          }
+                        >
+                          −
+                        </button>
+                        <span>{item.quantity}</span>
+                        <button
+                          onClick={() =>
+                            handleChangeQty(item.id, item.quantity + 1)
+                          }
+                        >
+                          +
+                        </button>
+                      </div>
+                      <button
+                        className="remove-btn"
+                        onClick={() => handleRemove(item.id)}
+                      >
+                        ✕
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
           <div className="cart-summary">
-            <div>
-              Total: <strong>${total.toFixed(2)}</strong>
+            <div className="summary-row">
+              <span>Total Items:</span>
+              <span>{cartItems.reduce((acc, i) => acc + i.quantity, 0)}</span>
             </div>
-            <button className="btn primary">Proceed to checkout</button>
+            <div className="summary-row total">
+              <span>Grand Total:</span>
+              <span>${grandTotal.toLocaleString()}</span>
+            </div>
+            <button className="btn checkout-btn">Proceed to Checkout</button>
           </div>
         </>
       )}

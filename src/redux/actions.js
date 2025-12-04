@@ -95,29 +95,47 @@ export const loadCart = (userId) => async (dispatch) => {
   }
 };
 
+// ... інші імпорти
+
 export const addToCart =
-  ({ userId, productId, quantity = 1 }) =>
+  ({ userId, productId, quantity = 1, options = {} }) =>
   async (dispatch, getState) => {
     if (!userId || !productId) return;
 
     const state = getState();
-    const existing = state.cart.items.find((it) => it.product_id === productId);
+
+    // Шукаємо, чи є в кошику такий самий товар з ТАКИМИ Ж опціями
+    const existing = state.cart.items.find((it) => {
+      return (
+        it.product_id === productId &&
+        it.engine_id === options.engineId &&
+        it.color_id === options.colorId &&
+        it.trim_id === options.trimId
+      );
+    });
 
     dispatch(cartRequest());
 
     try {
       if (existing) {
+        // Якщо така конфігурація вже є, просто збільшуємо кількість
         const newQty = (existing.quantity || 1) + quantity;
         const updated = await updateCartItemAPI(existing.id, {
           quantity: newQty,
         });
         dispatch(cartUpdate(updated));
       } else {
-        const created = await createCartItemAPI({
+        // Якщо це нова конфігурація, створюємо новий запис
+        const payload = {
           user_id: userId,
           product_id: productId,
           quantity,
-        });
+          // Передаємо параметри на бекенд
+          engine_id: options.engineId,
+          color_id: options.colorId,
+          trim_id: options.trimId,
+        };
+        const created = await createCartItemAPI(payload);
         dispatch(cartAdd(created));
       }
     } catch (e) {

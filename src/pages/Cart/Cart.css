@@ -1,60 +1,281 @@
-/* src/pages/Cart/Cart.css */
 .cart-page .cart-header {
     display: flex;
     align-items: center;
     gap: 1rem;
-    margin-bottom: 1rem;
+    margin-bottom: 2rem;
 }
 
 .cart-list {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 1.5rem;
 }
 
+/* === КАРТКА ТОВАРУ === */
 .cart-row {
-    display: flex;
-    gap: 1rem;
-    background: rgba(255, 255, 255, 0.03);
+    display: grid;
+    grid-template-columns: 180px 1fr auto; /* Фото - Інфо - Ціна/Дії */
+    gap: 1.5rem;
+    background: rgba(255, 255, 255, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.08);
     padding: 1rem;
-    border-radius: 8px;
+    border-radius: 12px;
     align-items: center;
+    transition: transform 0.2s, background 0.2s;
 }
 
+.cart-row:hover {
+    background: rgba(255, 255, 255, 0.06);
+}
+
+/* Фото */
 .cart-image img {
-    width: 120px;
-    height: 80px;
+    width: 100%;
+    height: 110px;
     object-fit: cover;
-    border-radius: 6px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
-.cart-body {
-    flex: 1;
+/* Деталі (Центр) */
+.cart-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
 }
 
-.cart-price {
-    margin: 0.3rem 0;
-    font-weight: 600;
+.cart-details h3 {
+    margin: 0;
+    font-size: 1.4rem;
+    color: var(--color-accent);
 }
 
+/* Теги модифікацій */
+.cart-specs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-top: 0.4rem;
+}
+
+.spec-tag {
+    font-size: 0.85rem;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 4px 10px;
+    border-radius: 20px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #ddd;
+}
+
+.color-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+/* Права частина (Ціна і кнопки) */
+.cart-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 1rem;
+    min-width: 140px;
+}
+
+.cart-price-block {
+    text-align: right;
+}
+
+.unit-price {
+    display: block;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: #fff;
+}
+
+.sub-total {
+    display: block;
+    font-size: 0.85rem;
+    color: #aaa;
+}
+
+/* Кнопки */
 .cart-actions {
     display: flex;
-    gap: 0.6rem;
     align-items: center;
+    gap: 1rem;
 }
 
-.cart-actions input[type="number"] {
-    width: 64px;
-    padding: 6px;
-    border-radius: 4px;
-    border: 1px solid rgba(255, 255, 255, 0.06);
+.qty-control {
+    display: flex;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 6px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.qty-control button {
     background: transparent;
-    color: inherit;
+    border: none;
+    color: #fff;
+    width: 32px;
+    height: 32px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
+.qty-control button:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.qty-control span {
+    font-weight: 600;
+    min-width: 24px;
+    text-align: center;
+    font-size: 0.95rem;
+}
+
+.remove-btn {
+    background: transparent;
+    border: 1px solid rgba(255, 90, 90, 0.3);
+    color: #ff5a5a;
+    width: 34px;
+    height: 34px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.remove-btn:hover {
+    background: #ff5a5a;
+    color: white;
+    border-color: #ff5a5a;
+}
+
+/* Підсумок (Footer) */
+/* Підсумок (Footer) */
 .cart-summary {
-    margin-top: 1.2rem;
+    margin: 3rem auto 0; /* Відступ зверху 3rem, по боках auto (центрує блок) */
+    background: rgba(255, 255, 255, 0.05);
+    padding: 2rem 3rem; /* Трохи більше повітря по боках */
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.08); /* Тонка рамка для краси */
+
+    /* Робимо блок розміром по вмісту */
+    width: fit-content;
+    min-width: 320px; /* Мінімальна ширина, щоб не був занадто вузьким */
+
+    /* Центруємо вміст всередині */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+}
+
+.summary-row {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    width: 100%; /* Розтягуємо рядки на всю ширину блоку */
+    gap: 2rem; /* Відстань між назвою (Total) і ціною */
+    font-size: 1.1rem;
+    color: #ccc;
+}
+
+.summary-row.total {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--color-accent);
+    margin-top: 0.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.checkout-btn {
+    background: var(--color-accent);
+    color: white;
+    border: none;
+    padding: 1rem 3rem; /* Ширша кнопка */
+    font-size: 1.1rem;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 1rem;
+    transition: background 0.3s;
+    width: 100%; /* Кнопка на всю ширину блоку */
+}
+
+.checkout-btn:hover {
+    background: #ff3b5e;
+}
+
+.empty-cart {
+    text-align: center;
+    padding: 4rem 0;
+}
+
+.empty-cart p {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    color: #aaa;
+}
+
+/* Адаптивність */
+@media (max-width: 768px) {
+    .cart-row {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .cart-image img {
+        height: 180px;
+    }
+
+    .cart-right {
+        flex-direction: row;
+        width: 100%;
+        align-items: center;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+        padding-top: 1rem;
+    }
+}
+
+/* Посилання на сторінку товару */
+.cart-image a {
+    display: block; /* Щоб посилання обгортало картинку повністю */
+    cursor: pointer;
+}
+
+.cart-item-title-link {
+    text-decoration: none;
+    color: inherit; /* Успадковує колір тексту (білий/світлий) */
+    display: inline-block;
+    width: fit-content;
+}
+
+.cart-item-title-link:hover h3 {
+    color: var(--color-accent); /* Змінює колір при наведенні */
+    text-decoration: underline;
+    transition: color 0.2s ease;
+}
+
+/* Переконаємось, що картинка теж реагує */
+.cart-image img {
+    transition: transform 0.3s ease;
+}
+
+.cart-image a:hover img {
+    transform: scale(1.05); /* Легке збільшення при наведенні на фото */
+    opacity: 0.9;
 }

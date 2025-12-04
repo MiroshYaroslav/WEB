@@ -2,6 +2,8 @@ import { Route, Routes } from "react-router-dom";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { loadFavorites } from "./redux/actions";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import Header from "./components/Header/Header";
 import Home from "./pages/Home";
 import Catalog from "./pages/Catalog/Catalog.jsx";
@@ -22,6 +24,18 @@ function App() {
 
   return (
     <div className="app">
+      <ToastContainer
+        position="bottom-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+      />
       <Header />
       <main className="main-content">
         <Routes>

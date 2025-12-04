@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -14,7 +14,7 @@ import {
   postReview,
 } from "../../utils/api";
 import { AnimatePresence, motion } from "framer-motion";
-
+import { toast } from "react-toastify"; // Імпорт для сповіщень
 import ContactModal from "../../components/ContactModal/ContactModal.jsx";
 import BackLink from "../../utils/BackButton.jsx";
 import Loader from "../../components/Loader/Loader.jsx";
@@ -23,6 +23,7 @@ import "./ProductPage.css";
 const ProductPage = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const currentUser = useSelector((s) => s.auth.currentUser);
   const favorites = useSelector((s) => s.favorites.items);
@@ -33,15 +34,24 @@ const ProductPage = () => {
   const [categoriesMap, setCategoriesMap] = useState({});
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+  // States for Configurator
+  const [selectedEngine, setSelectedEngine] = useState(null);
+  const [selectedColor, setSelectedColor] = useState(null);
+  const [selectedTrim, setSelectedTrim] = useState(null);
+
+  // UI States
   const [isImageOpen, setIsImageOpen] = useState(false);
   const [isContactOpen, setIsContactOpen] = useState(false);
 
+  // Form States
   const [form, setForm] = useState({ username: "", rating: "5", comment: "" });
   const [submitLoading, setSubmitLoading] = useState(false);
   const [submitError, setSubmitError] = useState("");
   const [submitSuccess, setSubmitSuccess] = useState("");
   const [hoverRating, setHoverRating] = useState(0);
 
+  // Helper Functions
   const formatDate = (iso) => {
     if (!iso) return "";
     try {
@@ -96,6 +106,7 @@ const ProductPage = () => {
     );
   };
 
+  // Data Loading
   useEffect(() => {
     const controller = new AbortController();
     setLoading(true);
@@ -106,6 +117,13 @@ const ProductPage = () => {
       try {
         const prod = await fetchProductById(id, { signal: controller.signal });
         setProduct(prod);
+
+        // Ініціалізація дефолтних опцій (перший елемент у списку)
+        if (prod) {
+          if (prod.engines?.length) setSelectedEngine(prod.engines[0]);
+          if (prod.colors?.length) setSelectedColor(prod.colors[0]);
+          if (prod.trims?.length) setSelectedTrim(prod.trims[0]);
+        }
 
         const revs = await fetchReviews(prod.id, { signal: controller.signal });
         setReviews(Array.isArray(revs) ? revs : []);
@@ -132,6 +150,7 @@ const ProductPage = () => {
     return () => controller.abort();
   }, [id]);
 
+  // Modal close on Escape
   useEffect(() => {
     const onKeyDown = (e) => {
       if (e.key === "Escape" && isImageOpen) setIsImageOpen(false);
@@ -140,12 +159,14 @@ const ProductPage = () => {
     return () => window.removeEventListener("keydown", onKeyDown);
   }, [isImageOpen]);
 
+  // Load Cart
   useEffect(() => {
     if (currentUser?.id && cartItems.length === 0) {
       dispatch(loadCart(currentUser.id));
     }
   }, [currentUser?.id, cartItems.length, dispatch]);
 
+  // Handlers
   const handleFormChange = (e) => {
     const { name, value } = e.target;
     setForm((s) => ({ ...s, [name]: value }));
@@ -188,6 +209,65 @@ const ProductPage = () => {
     }
   };
 
+  // === ЛОГІКА КОШИКА ===
+
+  // Перевіряємо, чи є в кошику товар з ТАКИМИ Ж опціями
+  const isCurrentConfigInCart = cartItems.some((item) => {
+    return (
+      item.product_id === product?.id &&
+      item.engine_id === selectedEngine?.id &&
+      item.color_id === selectedColor?.id &&
+      item.trim_id === selectedTrim?.id
+    );
+  });
+
+  const handleCartAction = async (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    if (!currentUser) {
+      toast.error("Please log in to add items to cart.");
+      return;
+    }
+
+    // 1. Якщо товар вже є -> переходимо до кошика
+    if (isCurrentConfigInCart) {
+      navigate("/cart");
+      return;
+    }
+
+    // 2. Якщо немає -> додаємо
+    const options = {
+      engineId: selectedEngine?.id,
+      colorId: selectedColor?.id,
+      trimId: selectedTrim?.id,
+    };
+
+    try {
+      await dispatch(
+        addToCart({
+          userId: currentUser.id,
+          productId: product.id,
+          quantity: 1,
+          options,
+        }),
+      );
+      toast.success("Successfully added to cart!");
+    } catch (error) {
+      console.error(error);
+      toast.error("Failed to add to cart");
+    }
+  };
+
+  // Розрахунок повної ціни
+  const calculateTotalPrice = () => {
+    let total = Number(product.base_price) || 0;
+    if (selectedEngine) total += Number(selectedEngine.price_modifier) || 0;
+    if (selectedColor) total += Number(selectedColor.price_modifier) || 0;
+    if (selectedTrim) total += Number(selectedTrim.price_modifier) || 0;
+    return total;
+  };
+
   if (loading)
     return (
       <section className="section container">
@@ -202,8 +282,13 @@ const ProductPage = () => {
       </section>
     );
 
+  // Динамічні специфікації
+  const currentPower = selectedEngine?.power || 0;
+  const currentAccel = selectedEngine?.acceleration || 0;
+  const currentSpeed = selectedEngine?.top_speed || 0;
+
   const specs = [
-    { label: "Power", value: product.power ? `${product.power} HP` : "" },
+    { label: "Power", value: currentPower ? `${currentPower} HP` : "-" },
     {
       label: "Category",
       value:
@@ -213,11 +298,11 @@ const ProductPage = () => {
     },
     {
       label: "Top Speed",
-      value: product.top_speed ? `${product.top_speed} km/h` : "",
+      value: currentSpeed ? `${currentSpeed} km/h` : "-",
     },
     {
       label: "0–100 km/h",
-      value: product.acceleration ? `${product.acceleration}s` : "",
+      value: currentAccel ? `${currentAccel}s` : "-",
     },
   ];
 
@@ -226,8 +311,7 @@ const ProductPage = () => {
     : "/image-car/placeholder.png";
 
   const isFavorited = favorites.some((f) => f.product_id === product.id);
-  const cartQty =
-    cartItems.find((item) => item.product_id === product.id)?.quantity || 0;
+  const totalPrice = calculateTotalPrice();
 
   return (
     <section className="section container product-page-container">
@@ -241,6 +325,7 @@ const ProductPage = () => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
       >
+        {/* Left Col - Image */}
         <motion.div
           className="product-image"
           initial={{ x: -60, opacity: 0 }}
@@ -255,6 +340,7 @@ const ProductPage = () => {
           />
         </motion.div>
 
+        {/* Right Col - Info & Config */}
         <motion.div
           className="product-info"
           initial={{ x: 60, opacity: 0 }}
@@ -273,7 +359,96 @@ const ProductPage = () => {
             ))}
           </div>
 
-          <p className="product-price">${product.price}</p>
+          {/* === CONFIGURATOR === */}
+          <div className="configurator">
+            {/* Engine Selection */}
+            {product.engines?.length > 0 && (
+              <div className="config-section">
+                <h3>Engine</h3>
+                <div className="options-grid">
+                  {product.engines.map((eng) => (
+                    <div
+                      key={eng.id}
+                      className={`option-card ${
+                        selectedEngine?.id === eng.id ? "active" : ""
+                      }`}
+                      onClick={() => setSelectedEngine(eng)}
+                    >
+                      <span className="opt-name">{eng.name}</span>
+                      <span className="opt-price">
+                        {eng.price_modifier > 0
+                          ? `+$${eng.price_modifier}`
+                          : eng.price_modifier < 0
+                            ? `-$${Math.abs(eng.price_modifier)}`
+                            : "Included"}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Color Selection */}
+            {product.colors?.length > 0 && (
+              <div className="config-section">
+                <h3>
+                  Color:{" "}
+                  <span style={{ fontWeight: 400, color: "#fff" }}>
+                    {selectedColor?.name}
+                  </span>
+                </h3>
+                <div className="colors-row">
+                  {product.colors.map((col) => (
+                    <div
+                      key={col.id}
+                      className={`color-circle ${
+                        selectedColor?.id === col.id ? "active" : ""
+                      }`}
+                      style={{ backgroundColor: col.hex_code }}
+                      title={`${col.name} ${
+                        col.price_modifier > 0
+                          ? `(+$${col.price_modifier})`
+                          : ""
+                      }`}
+                      onClick={() => setSelectedColor(col)}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Trim Selection */}
+            {product.trims?.length > 0 && (
+              <div className="config-section">
+                <h3>Trim / Package</h3>
+                <div className="options-grid">
+                  {product.trims.map((trim) => (
+                    <div
+                      key={trim.id}
+                      className={`option-card ${
+                        selectedTrim?.id === trim.id ? "active" : ""
+                      }`}
+                      onClick={() => setSelectedTrim(trim)}
+                    >
+                      <div className="opt-name">{trim.name}</div>
+                      <div className="opt-desc">{trim.description}</div>
+                      <div className="opt-price">
+                        {trim.price_modifier > 0
+                          ? `+$${trim.price_modifier}`
+                          : "Included"}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
+          {/* === END CONFIGURATOR === */}
+
+          <div className="price-tag">
+            <span>Total Price:</span>
+            <span className="price-value">${totalPrice.toLocaleString()}</span>
+          </div>
 
           <div className="product-buttons">
             <button
@@ -286,23 +461,10 @@ const ProductPage = () => {
             {currentUser?.id && (
               <>
                 <button
-                  className="btn add-to-cart"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    dispatch(
-                      addToCart({
-                        userId: currentUser.id,
-                        productId: product.id,
-                        quantity: 1,
-                      }),
-                    );
-                  }}
+                  className={`btn add-to-cart ${isCurrentConfigInCart ? "in-cart" : ""}`}
+                  onClick={handleCartAction}
                 >
-                  Add to cart
-                  {cartQty > 0 && (
-                    <span className="cart-counter">{cartQty}</span>
-                  )}
+                  {isCurrentConfigInCart ? "Go to Cart →" : "Add to cart"}
                 </button>
 
                 <button
@@ -314,7 +476,8 @@ const ProductPage = () => {
                       const fav = favorites.find(
                         (f) => f.product_id === product.id,
                       );
-                      dispatch(removeFromFavorites({ favoriteId: fav.id }));
+                      if (fav)
+                        dispatch(removeFromFavorites({ favoriteId: fav.id }));
                     } else {
                       dispatch(
                         addToFavorites({

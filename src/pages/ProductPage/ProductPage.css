@@ -1,19 +1,34 @@
-/* ===================== PRODUCT PAGE ===================== */
+.product-page-container {
+    padding-top: 100px !important;
+    min-height: 100vh;
+}
 
 .product-page {
     display: flex;
     flex-wrap: wrap;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
     gap: 4rem;
 }
 
+/* --- ВИПРАВЛЕННЯ 2: Підтягуємо фото вгору --- */
+.product-image {
+    flex: 1;
+    min-width: 300px;
+    max-width: 600px;
+    /* Від'ємний margin тягне блок вгору.
+       Це компенсує візуальні відступи тексту або порожнє місце на картинці.
+    */
+    margin-top: -15px;
+}
+
 .product-image img {
-    width: 550px;
+    width: 100%;
+    height: auto;
+    display: block;
     border-radius: 16px;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
     transition: transform 0.4s ease, box-shadow 0.4s ease;
-    cursor: pointer;
 }
 
 .product-image img:hover {
@@ -22,10 +37,14 @@
 }
 
 .product-info {
+    flex: 1;
+    min-width: 300px;
     max-width: 520px;
     display: flex;
     flex-direction: column;
     gap: 1.2rem;
+    /* Прибираємо верхній padding, щоб текст не опускався ще нижче */
+    padding-top: 0;
 }
 
 .product-info h1 {
@@ -309,4 +328,190 @@
 /* ===================== CONTACT BTN ===================== */
 .contact-btn {
     margin-top: 0.25rem;
+}
+
+/* ... попередні стилі ... */
+
+/* === CONFIGURATOR === */
+.configurator {
+    margin: 1.5rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    background: rgba(255, 255, 255, 0.02);
+    padding: 1.5rem;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.config-section h3 {
+    font-size: 1rem;
+    color: #999;
+    margin-bottom: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Сітка для карток (двигун, пакети) */
+.options-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 0.8rem;
+}
+
+.option-card {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    padding: 0.8rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 0.3rem;
+}
+
+.option-card:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.option-card.active {
+    border-color: var(--color-accent);
+    background: rgba(255, 90, 122, 0.1);
+    box-shadow: 0 0 10px rgba(255, 90, 122, 0.2);
+}
+
+.opt-name {
+    font-weight: 600;
+    color: #fff;
+    font-size: 0.9rem;
+}
+
+.opt-desc {
+    font-size: 0.75rem;
+    color: #aaa;
+    line-height: 1.3;
+}
+
+.opt-price {
+    font-size: 0.8rem;
+    color: var(--color-accent);
+    margin-top: auto; /* Притискає ціну до низу */
+}
+
+/* Кольори */
+.colors-row {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.color-circle {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid transparent;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.5);
+    transition: transform 0.2s, box-shadow 0.2s;
+    position: relative;
+}
+
+.color-circle:hover {
+    transform: scale(1.1);
+}
+
+/* Активний стан для кольору - біле обведення */
+.color-circle.active {
+    border-color: white;
+    transform: scale(1.15);
+    box-shadow: 0 0 12px rgba(255, 255, 255, 0.4);
+}
+
+/* Ціна разом */
+.price-tag {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.price-tag span:first-child {
+    font-size: 1.1rem;
+    color: #bbb;
+}
+
+.price-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #fff;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
+}
+
+/* Корекція існуючих стилів, якщо треба */
+.product-info h1 {
+    margin-bottom: 0.5rem; /* Зменшимо відступ, бо є опис */
+}
+
+/* Кнопка "В кошику" */
+.add-to-cart.in-cart {
+    background: #4caf50; /* Зелений колір */
+    border-color: #4caf50;
+}
+
+.add-to-cart.in-cart:hover {
+    background: #45a049;
+}
+
+/* Відступ для блоку з кнопкою назад */
+/* Додаємо відступ зверху спеціально для блоку з кнопкою */
+.page-header {
+    width: 100%;
+    /* Ми обмежуємо ширину хедера шириною контенту:
+       550px (фото) + 4rem (gap ~64px) + 520px (інфо) ≈ 1134px.
+       Тепер кнопка буде рівно над лівим краєм фото.
+    */
+    max-width: 1140px;
+    margin: 0 auto 2rem auto; /* auto по боках центрує весь блок */
+    display: flex;
+}
+
+.back-btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: rgba(255, 255, 255, 0.08);
+    border-radius: 8px;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border: 1px solid transparent;
+}
+
+.back-btn:hover {
+    background-color: var(--color-accent);
+    transform: translateX(-5px);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+@media (max-width: 960px) {
+    .product-page {
+        flex-direction: column; /* Стовпчик */
+        align-items: center; /* Все по центру */
+        gap: 2rem;
+    }
+
+    .page-header {
+        justify-content: center; /* Кнопка по центру на мобільному (за бажанням) */
+    }
+
+    .product-image,
+    .product-info {
+        width: 100%;
+        max-width: 100%;
+    }
 }
