@@ -4,6 +4,21 @@ const API = import.meta.env.VITE_API_URL || "http://localhost:8000";
 
 const http = axios.create({ baseURL: API });
 
+http.interceptors.request.use((config) => {
+  try {
+    const userStr = localStorage.getItem("currentUser");
+    if (userStr) {
+      const user = JSON.parse(userStr);
+      if (user?.access_token) {
+        config.headers.Authorization = `Bearer ${user.access_token}`;
+      }
+    }
+  } catch (error) {
+    console.error("Error parsing user from local storage", error);
+  }
+  return config;
+});
+
 function buildQuery(params = {}) {
   const qp = new URLSearchParams();
   Object.entries(params).forEach(([key, value]) => {
@@ -220,5 +235,27 @@ export async function updateCartItemAPI(id, payload = {}) {
     return res.data;
   } catch (e) {
     normalizeAndThrow(e, "Failed to update cart item");
+  }
+}
+
+export async function createOrder(payload = {}, params = {}) {
+  const qs = buildQuery(params);
+  try {
+    const res = await http.post(`/orders/${qs ? `?${qs}` : ""}`, payload, {
+      headers: { "Content-Type": "application/json" },
+    });
+    return res.data;
+  } catch (e) {
+    normalizeAndThrow(e, "Failed to create order");
+  }
+}
+
+export async function fetchOrders(params = {}) {
+  const qs = buildQuery(params);
+  try {
+    const res = await http.get(`/orders/${qs ? `?${qs}` : ""}`);
+    return res.data;
+  } catch (e) {
+    normalizeAndThrow(e, "Failed to fetch orders");
   }
 }

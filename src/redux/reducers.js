@@ -1,6 +1,7 @@
 import { combineReducers } from "redux";
 import {
   CART_ADD,
+  CART_CLEAR,
   CART_FAILURE,
   CART_REMOVE,
   CART_REQUEST,
@@ -11,7 +12,7 @@ import {
   FAV_REMOVE,
   FAV_REQUEST,
   FAV_SET,
-  SET_CURRENT_USER,
+  SET_CURRENT_USER
 } from "./actions";
 
 const initialAuth = {
@@ -95,6 +96,13 @@ function cart(state = initialCart, action) {
         ...state,
         loading: false,
         items: state.items.filter((it) => it.id !== action.payload),
+      };
+    case CART_CLEAR:
+      return {
+        ...state,
+        loading: false,
+        error: "",
+        items: [],
       };
 
     default:

@@ -75,6 +75,11 @@ export const CART_SET = "cart/SET";
 export const CART_ADD = "cart/ADD";
 export const CART_REMOVE = "cart/REMOVE";
 export const CART_UPDATE = "cart/UPDATE";
+export const CART_CLEAR = "cart/CLEAR";
+export const cartClear = () => ({ type: CART_CLEAR });
+export const clearCart = () => (dispatch) => {
+  dispatch(cartClear());
+};
 
 const cartRequest = () => ({ type: CART_REQUEST });
 const cartFailure = (error) => ({ type: CART_FAILURE, error });

@@ -12,6 +12,9 @@ import Catalog from "./pages/Catalog/Catalog.jsx";
 import ProductPage from "./pages/ProductPage/ProductPage.jsx";
 import Favorites from "./pages/Favorites/Favorites.jsx";
 import Cart from "./pages/Cart/Cart.jsx";
+import Checkout from "./pages/Checkout/Checkout.jsx";
+import Success from "./pages/Success/Success.jsx";
+import Orders from "./pages/Orders/Orders.jsx";
 
 function App() {
   const dispatch = useDispatch();
@@ -45,6 +48,9 @@ function App() {
           <Route path="/product/:id" element={<ProductPage />} />
           <Route path="/favorites" element={<Favorites />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/checkout" element={<Checkout />} />
+          <Route path="/success" element={<Success />} />
+          <Route path="/orders" element={<Orders />} />
 
           <Route
             path="*"

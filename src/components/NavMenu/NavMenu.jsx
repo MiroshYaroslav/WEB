@@ -1,9 +1,10 @@
-import { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
-import { useSelector } from "react-redux";
+import {useEffect, useRef, useState} from "react";
+import {Link} from "react-router-dom";
+import {useSelector} from "react-redux";
+import {FiGrid, FiHeart, FiPackage, FiShoppingCart, FiUser,} from "react-icons/fi";
 import AuthModal from "../AuthModal/AuthModal";
 import "./NavMenu.css";
-import { fetchCategories } from "../../utils/api";
+import {fetchCategories} from "../../utils/api";
 
 const NavMenu = () => {
   const [showDropdown, setShowDropdown] = useState(false);
@@ -56,10 +57,11 @@ const NavMenu = () => {
     <nav className="nav" ref={dropdownRef}>
       <div className="catalog-dropdown">
         <i
-          className={`nav-link catalog-btn ${showDropdown ? "active" : ""}`}
+          className={`nav-link catalog-btn icon-btn ${showDropdown ? "active" : ""}`}
           onClick={toggleDropdown}
+          title="Catalog"
         >
-          Catalog
+          <FiGrid size={24} />
         </i>
 
         <div className={`dropdown-menu ${showDropdown ? "active" : ""}`}>
@@ -86,17 +88,26 @@ const NavMenu = () => {
 
       {currentUser && (
         <>
-          <Link to="/favorites" className="nav-link">
-            Favorites
+          <Link to="/favorites" className="nav-link icon-btn" title="Favorites">
+            <FiHeart size={24} />
           </Link>
-          <Link to="/cart" className="nav-link">
-            Cart
+
+          <Link to="/cart" className="nav-link icon-btn" title="Cart">
+            <FiShoppingCart size={24} />
+          </Link>
+
+          <Link to="/orders" className="nav-link icon-btn" title="My Orders">
+            <FiPackage size={24} />
           </Link>
         </>
       )}
 
-      <button className="nav-link" onClick={() => setIsAuthOpen(true)}>
-        {currentUser ? (currentUser.username ?? "Account") : "Account"}
+      <button
+        className="nav-link icon-btn"
+        onClick={() => setIsAuthOpen(true)}
+        title={currentUser ? `Signed in as ${currentUser.username}` : "Log in"}
+      >
+        <FiUser size={24} />
       </button>
 
       <AuthModal isOpen={isAuthOpen} onClose={() => setIsAuthOpen(false)} />

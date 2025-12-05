@@ -1,0 +1,36 @@
+.success-page {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 80vh;
+    text-align: center;
+}
+
+.success-content {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 3rem;
+    border-radius: 16px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    max-width: 500px;
+}
+
+.success-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+}
+
+.success-content h1 {
+    color: var(--color-accent);
+    margin-bottom: 1rem;
+}
+
+.success-content p {
+    color: #ccc;
+    margin-bottom: 2rem;
+}
+
+.home-btn {
+    display: inline-block;
+    padding: 0.8rem 2rem;
+    text-decoration: none;
+}

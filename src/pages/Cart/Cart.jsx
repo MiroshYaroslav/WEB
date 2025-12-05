@@ -9,6 +9,10 @@ import {
 } from "../../redux/actions";
 import "./Cart.css";
 import BackLink from "../../utils/BackButton.jsx";
+import {
+  calculateGrandTotal,
+  calculateItemPrice,
+} from "../../utils/cartHelpers.js";
 import Loader from "../../components/Loader/Loader.jsx";
 
 const Cart = () => {
@@ -17,6 +21,7 @@ const Cart = () => {
 
   const currentUser = useSelector((s) => s.auth.currentUser);
   const { items: cartItems, loading, error } = useSelector((s) => s.cart);
+  const grandTotal = calculateGrandTotal(cartItems);
 
   useEffect(() => {
     if (currentUser?.id) {
@@ -47,15 +52,6 @@ const Cart = () => {
     );
   }
 
-  const calculateItemPrice = (item) => {
-    const base = Number(item.product?.base_price) || 0;
-    const enginePrice = Number(item.engine?.price_modifier) || 0;
-    const colorPrice = Number(item.color?.price_modifier) || 0;
-    const trimPrice = Number(item.trim?.price_modifier) || 0;
-
-    return base + enginePrice + colorPrice + trimPrice;
-  };
-
   const handleRemove = (cartItemId) => {
     dispatch(removeFromCart({ cartItemId }));
   };
@@ -64,11 +60,6 @@ const Cart = () => {
     const q = Math.max(1, Number(qty) || 1);
     dispatch(updateCartQuantity({ cartItemId, quantity: q }));
   };
-
-  const grandTotal = cartItems.reduce(
-    (sum, item) => sum + calculateItemPrice(item) * (item.quantity || 1),
-    0,
-  );
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -254,6 +245,7 @@ const Cart = () => {
               className="btn checkout-btn"
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
+              onClick={() => navigate("/checkout")}
             >
               Proceed to Checkout
             </motion.button>
