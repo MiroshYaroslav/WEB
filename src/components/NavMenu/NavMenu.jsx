@@ -1,10 +1,16 @@
-import {useEffect, useRef, useState} from "react";
-import {Link} from "react-router-dom";
-import {useSelector} from "react-redux";
-import {FiGrid, FiHeart, FiPackage, FiShoppingCart, FiUser,} from "react-icons/fi";
+import { useEffect, useRef, useState } from "react";
+import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import {
+  FiGrid,
+  FiHeart,
+  FiPackage,
+  FiShoppingCart,
+  FiUser,
+} from "react-icons/fi";
 import AuthModal from "../AuthModal/AuthModal";
 import "./NavMenu.css";
-import {fetchCategories} from "../../utils/api";
+import { fetchCategories } from "../../utils/api";
 
 const NavMenu = () => {
   const [showDropdown, setShowDropdown] = useState(false);

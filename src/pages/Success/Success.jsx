@@ -1,6 +1,6 @@
-import {useEffect} from "react";
-import {Link} from "react-router-dom";
-import {motion} from "framer-motion";
+import { useEffect } from "react";
+import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 import "./Success.css";
 
 const Success = () => {

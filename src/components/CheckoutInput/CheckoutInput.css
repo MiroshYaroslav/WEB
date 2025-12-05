@@ -1,38 +1,38 @@
 .checkout-input-group {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    margin-bottom: 1rem;
-    position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  position: relative;
 }
 
 .checkout-input-group label {
-    font-size: 0.9rem;
-    color: #ccc;
-    font-weight: 500;
+  font-size: 0.9rem;
+  color: #ccc;
+  font-weight: 500;
 }
 
 .checkout-input {
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    padding: 0.8rem;
-    border-radius: 8px;
-    color: #fff;
-    font-size: 1rem;
-    outline: none;
-    transition: border-color 0.3s;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 0.8rem;
+  border-radius: 8px;
+  color: #fff;
+  font-size: 1rem;
+  outline: none;
+  transition: border-color 0.3s;
 }
 
 .checkout-input:focus {
-    border-color: var(--color-accent);
+  border-color: var(--color-accent);
 }
 
 .checkout-input.input-error {
-    border-color: #ff4d4d;
+  border-color: #ff4d4d;
 }
 
 .error-message {
-    color: #ff4d4d;
-    font-size: 0.85rem;
-    margin-top: 2px;
+  color: #ff4d4d;
+  font-size: 0.85rem;
+  margin-top: 2px;
 }

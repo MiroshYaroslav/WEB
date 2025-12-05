@@ -12,7 +12,7 @@ import {
   FAV_REMOVE,
   FAV_REQUEST,
   FAV_SET,
-  SET_CURRENT_USER
+  SET_CURRENT_USER,
 } from "./actions";
 
 const initialAuth = {
