@@ -38,15 +38,25 @@ function normalizeAndThrow(e, fallback) {
   if (e?.code === "ERR_CANCELED" || e?.name === "CanceledError") {
     throw toAbortError();
   }
+
   const detail = e?.response?.data?.detail;
   const status = e?.response?.status;
   const base = fallback || e?.message || "Request failed";
-  const msg = detail
-    ? `${base} - ${detail}`
-    : status
-      ? `${base}: ${status}`
-      : base;
+
+  let msg = base;
+
+  if (detail) {
+    if (typeof detail === "string") {
+      msg = detail;
+    } else if (Array.isArray(detail)) {
+      msg = detail.map((err) => err.msg).join(", ");
+    }
+  } else if (status) {
+    msg = `${base} (Code: ${status})`;
+  }
+
   const err = new Error(msg);
+  err.status = status;
   throw err;
 }
 
@@ -148,27 +158,6 @@ export async function deleteFavorite(id, options = {}) {
   }
 }
 
-export async function fetchUsers(options = {}) {
-  try {
-    const res = await http.get(`/users/`, { signal: options.signal });
-    return res.data;
-  } catch (e) {
-    normalizeAndThrow(e, "Failed to fetch users");
-  }
-}
-
-export async function createUserApi(payload = {}, options = {}) {
-  try {
-    const res = await http.post(`/users/`, payload, {
-      signal: options.signal,
-      headers: { "Content-Type": "application/json" },
-    });
-    return res.data;
-  } catch (e) {
-    normalizeAndThrow(e, "Failed to create user");
-  }
-}
-
 export async function fetchCartItems(params = {}, options = {}) {
   const qs = buildQuery(params);
   try {
@@ -216,28 +205,6 @@ export async function deleteCartItem(id, options = {}) {
   }
 }
 
-export async function createCartItemAPI(payload = {}) {
-  try {
-    const res = await http.post("/cart/", payload, {
-      headers: { "Content-Type": "application/json" },
-    });
-    return res.data;
-  } catch (e) {
-    normalizeAndThrow(e, "Failed to add to cart");
-  }
-}
-
-export async function updateCartItemAPI(id, payload = {}) {
-  try {
-    const res = await http.patch(`/cart/${id}/`, payload, {
-      headers: { "Content-Type": "application/json" },
-    });
-    return res.data;
-  } catch (e) {
-    normalizeAndThrow(e, "Failed to update cart item");
-  }
-}
-
 export async function createOrder(payload = {}, params = {}) {
   const qs = buildQuery(params);
   try {
@@ -257,5 +224,27 @@ export async function fetchOrders(params = {}) {
     return res.data;
   } catch (e) {
     normalizeAndThrow(e, "Failed to fetch orders");
+  }
+}
+
+export async function loginUser(credentials) {
+  const formData = new FormData();
+  formData.append("username", credentials.email);
+  formData.append("password", credentials.password);
+
+  try {
+    const res = await http.post("/auth/token", formData);
+    return { ...res.data.user, access_token: res.data.access_token };
+  } catch (e) {
+    normalizeAndThrow(e, "Login failed");
+  }
+}
+
+export async function registerUser(userData) {
+  try {
+    const res = await http.post("/auth/register", userData);
+    return res.data;
+  } catch (e) {
+    normalizeAndThrow(e, "Registration failed");
   }
 }

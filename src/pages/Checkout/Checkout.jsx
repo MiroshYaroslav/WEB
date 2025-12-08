@@ -15,7 +15,9 @@ const Checkout = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const cartItems = useSelector((s) => s.cart.items);
+
   const currentUser = useSelector((s) => s.auth.currentUser);
+
   const grandTotal = calculateGrandTotal(cartItems);
 
   if (cartItems.length === 0) {
@@ -32,10 +34,18 @@ const Checkout = () => {
   const validationSchema = Yup.object({
     first_name: Yup.string().max(15).required("First name is required"),
     last_name: Yup.string().max(20).required("Last name is required"),
-    email: Yup.string().email().required("Email is required"),
+
+    email: Yup.string()
+      .matches(
+        /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+        "Invalid email format (e.g. name@domain.com)",
+      )
+      .required("Email is required"),
+
     phone: Yup.string()
-      .matches(/^\d{10,12}$/, "Invalid phone")
+      .matches(/^\d{10,12}$/, "Invalid phone (10-12 digits)")
       .required("Phone is required"),
+
     address: Yup.string().min(5).required("Address is required"),
   });
 
@@ -58,12 +68,13 @@ const Checkout = () => {
         >
           <Formik
             initialValues={{
-              first_name: "",
-              last_name: "",
-              email: "",
-              phone: "",
-              address: "",
+              first_name: currentUser?.first_name || "",
+              last_name: currentUser?.last_name || "",
+              email: currentUser?.email || "",
+              phone: currentUser?.phone || "",
+              address: currentUser?.address || "",
             }}
+            enableReinitialize={true}
             validationSchema={validationSchema}
             onSubmit={async (values, { setSubmitting }) => {
               setSubmitting(true);
@@ -76,7 +87,6 @@ const Checkout = () => {
                 }
 
                 dispatch(clearCart());
-
                 navigate("/success");
               } catch (error) {
                 console.error(error);

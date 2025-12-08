@@ -7,6 +7,9 @@ import "react-toastify/dist/ReactToastify.css";
 
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
+import ProtectedRoute from "./components/Routes/ProtectedRoute";
+import PublicRoute from "./components/Routes/PublicRoute";
+
 import Home from "./pages/Home";
 import Catalog from "./pages/Catalog/Catalog.jsx";
 import ProductPage from "./pages/ProductPage/ProductPage.jsx";
@@ -15,6 +18,8 @@ import Cart from "./pages/Cart/Cart.jsx";
 import Checkout from "./pages/Checkout/Checkout.jsx";
 import Success from "./pages/Success/Success.jsx";
 import Orders from "./pages/Orders/Orders.jsx";
+import LoginPage from "./pages/Auth/LoginPage.jsx";
+import RegisterPage from "./pages/Auth/RegisterPage.jsx";
 
 function App() {
   const dispatch = useDispatch();
@@ -28,29 +33,27 @@ function App() {
 
   return (
     <div className="app">
-      <ToastContainer
-        position="bottom-right"
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="dark"
-      />
+      <ToastContainer position="bottom-right" autoClose={3000} theme="dark" />
+
       <Header />
+
       <main className="main-content">
         <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/catalog/:category" element={<Catalog />} />
-          <Route path="/product/:id" element={<ProductPage />} />
-          <Route path="/favorites" element={<Favorites />} />
-          <Route path="/cart" element={<Cart />} />
-          <Route path="/checkout" element={<Checkout />} />
-          <Route path="/success" element={<Success />} />
-          <Route path="/orders" element={<Orders />} />
+          <Route element={<PublicRoute />}>
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
+          </Route>
+
+          <Route element={<ProtectedRoute />}>
+            <Route path="/" element={<Home />} />
+            <Route path="/catalog/:category" element={<Catalog />} />
+            <Route path="/product/:id" element={<ProductPage />} />
+            <Route path="/favorites" element={<Favorites />} />
+            <Route path="/cart" element={<Cart />} />
+            <Route path="/checkout" element={<Checkout />} />
+            <Route path="/success" element={<Success />} />
+            <Route path="/orders" element={<Orders />} />
+          </Route>
 
           <Route
             path="*"
