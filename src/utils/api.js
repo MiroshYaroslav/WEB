@@ -170,7 +170,7 @@ export async function fetchCartItems(params = {}, options = {}) {
   }
 }
 
-export async function createCartItem(payload = {}, options = {}) {
+export async function createCartItemAPI(payload = {}, options = {}) {
   try {
     const res = await http.post(`/cart/`, payload, {
       signal: options.signal,
@@ -182,7 +182,7 @@ export async function createCartItem(payload = {}, options = {}) {
   }
 }
 
-export async function updateCartItem(id, payload = {}, options = {}) {
+export async function updateCartItemAPI(id, payload = {}, options = {}) {
   try {
     const res = await http.patch(`/cart/${id}`, payload, {
       signal: options.signal,
