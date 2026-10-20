@@ -86,8 +86,11 @@ const Checkout = () => {
                   return;
                 }
 
+                // Leave checkout in the history stack only after the cart has
+                // been cleared; otherwise Back returns to an empty checkout
+                // form during the same transition and can strand the view.
+                navigate("/success", { replace: true });
                 dispatch(clearCart());
-                navigate("/success");
               } catch (error) {
                 console.error(error);
                 toast.error(error.message || "Failed to create order");

@@ -2,6 +2,7 @@ import "./ProductCard.css";
 import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { addToFavorites, removeFromFavorites } from "../../redux/actions";
+import { getApiAssetUrl } from "../../utils/api.js";
 
 const ProductCard = ({ product }) => {
   const dispatch = useDispatch();
@@ -10,8 +11,8 @@ const ProductCard = ({ product }) => {
 
   if (!product) return null;
 
-  const imageSrc = product.image
-    ? `http://localhost:8000${product.image}`
+  const imageSrc = product.image_url
+    ? getApiAssetUrl(product.image_url)
     : "/image-car/placeholder.png";
 
   const userId = currentUser?.id;

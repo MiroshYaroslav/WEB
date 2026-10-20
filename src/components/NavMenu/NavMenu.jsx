@@ -9,7 +9,7 @@ import {
   FiShoppingCart,
   FiUser,
 } from "react-icons/fi";
-import { setCurrentUser } from "../../redux/actions";
+import { logoutCurrentUser } from "../../redux/actions";
 import { fetchCategories } from "../../utils/api";
 import "./NavMenu.css";
 
@@ -60,9 +60,9 @@ const NavMenu = () => {
   const toggleDropdown = () => setShowDropdown((prev) => !prev);
 
   // Функція виходу
-  const handleSignOut = () => {
-    dispatch(setCurrentUser(null));
-    navigate("/login");
+  const handleSignOut = async () => {
+    await dispatch(logoutCurrentUser());
+    navigate("/login", { replace: true });
   };
 
   return (

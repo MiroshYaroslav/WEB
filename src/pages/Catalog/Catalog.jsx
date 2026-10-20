@@ -18,7 +18,9 @@ const Catalog = () => {
     sort: "",
   });
 
-  useEffect(() => window.scrollTo(0, 0), [category]);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [category]);
 
   const { data: categoriesList = [] } = useQuery({
     queryKey: ["categories"],

@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { loadFavorites } from "./redux/actions";
@@ -10,16 +10,18 @@ import Footer from "./components/Footer/Footer";
 import ProtectedRoute from "./components/Routes/ProtectedRoute";
 import PublicRoute from "./components/Routes/PublicRoute";
 
-import Home from "./pages/Home";
-import Catalog from "./pages/Catalog/Catalog.jsx";
-import ProductPage from "./pages/ProductPage/ProductPage.jsx";
-import Favorites from "./pages/Favorites/Favorites.jsx";
-import Cart from "./pages/Cart/Cart.jsx";
-import Checkout from "./pages/Checkout/Checkout.jsx";
-import Success from "./pages/Success/Success.jsx";
-import Orders from "./pages/Orders/Orders.jsx";
-import LoginPage from "./pages/Auth/LoginPage.jsx";
-import RegisterPage from "./pages/Auth/RegisterPage.jsx";
+import Loader from "./components/Loader/Loader.jsx";
+
+const Home = lazy(() => import("./pages/Home.jsx"));
+const Catalog = lazy(() => import("./pages/Catalog/Catalog.jsx"));
+const ProductPage = lazy(() => import("./pages/ProductPage/ProductPage.jsx"));
+const Favorites = lazy(() => import("./pages/Favorites/Favorites.jsx"));
+const Cart = lazy(() => import("./pages/Cart/Cart.jsx"));
+const Checkout = lazy(() => import("./pages/Checkout/Checkout.jsx"));
+const Success = lazy(() => import("./pages/Success/Success.jsx"));
+const Orders = lazy(() => import("./pages/Orders/Orders.jsx"));
+const LoginPage = lazy(() => import("./pages/Auth/LoginPage.jsx"));
+const RegisterPage = lazy(() => import("./pages/Auth/RegisterPage.jsx"));
 
 function App() {
   const dispatch = useDispatch();
@@ -38,32 +40,34 @@ function App() {
       <Header />
 
       <main className="main-content">
-        <Routes>
-          <Route element={<PublicRoute />}>
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/register" element={<RegisterPage />} />
-          </Route>
+        <Suspense fallback={<Loader />}>
+          <Routes>
+            <Route element={<PublicRoute />}>
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/register" element={<RegisterPage />} />
+            </Route>
 
-          <Route element={<ProtectedRoute />}>
             <Route path="/" element={<Home />} />
             <Route path="/catalog/:category" element={<Catalog />} />
             <Route path="/product/:id" element={<ProductPage />} />
-            <Route path="/favorites" element={<Favorites />} />
-            <Route path="/cart" element={<Cart />} />
-            <Route path="/checkout" element={<Checkout />} />
-            <Route path="/success" element={<Success />} />
-            <Route path="/orders" element={<Orders />} />
-          </Route>
+            <Route element={<ProtectedRoute />}>
+              <Route path="/favorites" element={<Favorites />} />
+              <Route path="/cart" element={<Cart />} />
+              <Route path="/checkout" element={<Checkout />} />
+              <Route path="/success" element={<Success />} />
+              <Route path="/orders" element={<Orders />} />
+            </Route>
 
-          <Route
-            path="*"
-            element={
-              <h2 style={{ textAlign: "center", margin: "4rem" }}>
-                Page not found
-              </h2>
-            }
-          />
-        </Routes>
+            <Route
+              path="*"
+              element={
+                <h2 style={{ textAlign: "center", margin: "4rem" }}>
+                  Page not found
+                </h2>
+              }
+            />
+          </Routes>
+        </Suspense>
       </main>
       <Footer />
     </div>

@@ -14,6 +14,7 @@ import {
   calculateItemPrice,
 } from "../../utils/cartHelpers.js";
 import Loader from "../../components/Loader/Loader.jsx";
+import { getApiAssetUrl } from "../../utils/api.js";
 
 const Cart = () => {
   const dispatch = useDispatch();
@@ -115,8 +116,8 @@ const Cart = () => {
                 const price = calculateItemPrice(item);
                 const product = item.product || {};
 
-                const imageSrc = product.image
-                  ? `http://localhost:8000${product.image}`
+                const imageSrc = product.image_url
+                  ? getApiAssetUrl(product.image_url)
                   : "/image-car/placeholder.png";
 
                 const productLink = `/product/${product.id || item.product_id}`;

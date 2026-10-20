@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { fetchPhoneNumbers } from "../../utils/api";
+import { fetchCallbackContacts } from "../../utils/api.js";
 import "./ContactModal.css";
 
 const ContactModal = ({ isOpen, onClose, title = "Contact us" }) => {
-  const [numbers, setNumbers] = useState([]);
+  const [contacts, setContacts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -16,13 +16,13 @@ const ContactModal = ({ isOpen, onClose, title = "Contact us" }) => {
       setError("");
       setLoading(true);
       try {
-        const list = await fetchPhoneNumbers({ signal: controller.signal });
-        if (!ignore) setNumbers(Array.isArray(list) ? list : []);
+        const list = await fetchCallbackContacts({ signal: controller.signal });
+        if (!ignore) setContacts(Array.isArray(list) ? list : []);
       } catch (e) {
         if (!ignore) {
           console.error(e);
-          setError("Failed to load phone numbers.");
-          setNumbers([]);
+          setError("Failed to load contact numbers.");
+          setContacts([]);
         }
       } finally {
         if (!ignore) setLoading(false);
@@ -76,25 +76,28 @@ const ContactModal = ({ isOpen, onClose, title = "Contact us" }) => {
               </button>
             </div>
             <div className="contact-body">
-              {loading && <p>Loading phone numbers...</p>}
+              {loading && <p>Loading contacts...</p>}
               {error && <p className="contact-error">{error}</p>}
               {!loading &&
                 !error &&
-                (numbers?.length ? (
+                (contacts.length ? (
                   <ul className="phone-list">
-                    {numbers.map((pn) => (
-                      <li key={pn.id} className="phone-item">
-                        <a href={`tel:${pn.number}`} className="phone-number">
-                          {pn.number}
+                    {contacts.map((contact) => (
+                      <li key={contact.id} className="phone-item">
+                        <a
+                          href={`tel:${contact.number}`}
+                          className="phone-number"
+                        >
+                          {contact.description || contact.number}
                         </a>
-                        {pn.description && (
-                          <div className="phone-desc">{pn.description}</div>
+                        {contact.description && (
+                          <div className="phone-desc">{contact.number}</div>
                         )}
                       </li>
                     ))}
                   </ul>
                 ) : (
-                  <p>No contact numbers yet.</p>
+                  <p>No contacts yet.</p>
                 ))}
             </div>
           </motion.div>

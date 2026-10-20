@@ -5,6 +5,7 @@ import {
   deleteFavorite,
   fetchCartItems as apiFetchCartItems,
   fetchFavorites,
+  logoutUserAPI,
   updateCartItemAPI,
 } from "../utils/api";
 
@@ -79,6 +80,18 @@ export const CART_CLEAR = "cart/CLEAR";
 export const cartClear = () => ({ type: CART_CLEAR });
 export const clearCart = () => (dispatch) => {
   dispatch(cartClear());
+};
+
+export const logoutCurrentUser = () => async (dispatch) => {
+  try {
+    await logoutUserAPI();
+  } catch (error) {
+    // Always clear local auth state, even when the cookie has already expired.
+    console.warn("Backend logout request failed", error);
+  } finally {
+    dispatch(setCurrentUser(null));
+    dispatch(cartClear());
+  }
 };
 
 const cartRequest = () => ({ type: CART_REQUEST });

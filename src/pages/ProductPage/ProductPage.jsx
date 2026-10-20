@@ -12,6 +12,7 @@ import {
   fetchCategories,
   fetchProductById,
   fetchReviews,
+  getApiAssetUrl,
   postReview,
 } from "../../utils/api";
 import { AnimatePresence, motion } from "framer-motion";
@@ -243,8 +244,8 @@ const ProductPage = () => {
     { label: "Top Speed", value: currentSpeed ? `${currentSpeed} km/h` : "-" },
     { label: "0–100 km/h", value: currentAccel ? `${currentAccel}s` : "-" },
   ];
-  const imageSrc = product.image
-    ? `http://localhost:8000${product.image}`
+  const imageSrc = product.image_url
+    ? getApiAssetUrl(product.image_url)
     : "/image-car/placeholder.png";
   const isFavorited = favorites.some((f) => f.product_id === product.id);
   const totalPrice = calculateTotalPrice();

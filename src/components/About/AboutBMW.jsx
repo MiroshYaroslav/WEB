@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import img from "../../assets/about-bmw.png";
+import img from "../../assets/about-bmw.webp";
 import "./AboutBMW.css";
 
 const AboutBMW = () => {

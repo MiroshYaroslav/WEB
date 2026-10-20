@@ -1,23 +1,145 @@
 import axios from "axios";
 
-const API = import.meta.env.VITE_API_URL || "http://localhost:8000";
+const configuredApiUrl = import.meta.env.VITE_API_URL?.trim();
 
-const http = axios.create({ baseURL: API });
+if (!configuredApiUrl) {
+  throw new Error(
+    "VITE_API_URL is missing. Copy .env.development.example to .env.local or set it in Vercel.",
+  );
+}
+
+export const API_BASE_URL = configuredApiUrl.replace(/\/+$/, "");
+
+const API_ORIGIN = API_BASE_URL.replace(/\/api\/v1\/?$/, "");
+
+export function getApiAssetUrl(path) {
+  if (!path) return "";
+  if (/^https?:\/\//i.test(path)) return path;
+  return `${API_ORIGIN}${path.startsWith("/") ? path : `/${path}`}`;
+}
+
+const http = axios.create({ baseURL: API_BASE_URL, withCredentials: true });
+
+let authCallbacks = {};
+let refreshInProgress = false;
+let refreshWaiters = [];
+
+export function configureAuthCallbacks(callbacks) {
+  authCallbacks = callbacks;
+}
+
+function settleRefreshWaiters(error, accessToken) {
+  refreshWaiters.forEach(({ resolve, reject }) => {
+    if (error) reject(error);
+    else resolve(accessToken);
+  });
+  refreshWaiters = [];
+}
+
+function getPersistedCurrentUser() {
+  // Support the old standalone value while reading the actual redux-persist
+  // format used by this app (persist:root -> auth -> currentUser).
+  const standaloneUser = localStorage.getItem("currentUser");
+  if (standaloneUser) {
+    try {
+      const parsed = JSON.parse(standaloneUser);
+      if (parsed?.access_token) return parsed;
+    } catch {
+      // Try the redux-persist state below.
+    }
+  }
+
+  const persistedRoot = localStorage.getItem("persist:root");
+  if (!persistedRoot) return null;
+
+  try {
+    const root = JSON.parse(persistedRoot);
+    const auth =
+      typeof root.auth === "string" ? JSON.parse(root.auth) : root.auth;
+    return auth?.currentUser ?? null;
+  } catch (error) {
+    console.error("Error parsing persisted auth state", error);
+    return null;
+  }
+}
 
 http.interceptors.request.use((config) => {
-  try {
-    const userStr = localStorage.getItem("currentUser");
-    if (userStr) {
-      const user = JSON.parse(userStr);
-      if (user?.access_token) {
-        config.headers.Authorization = `Bearer ${user.access_token}`;
-      }
-    }
-  } catch (error) {
-    console.error("Error parsing user from local storage", error);
+  const user = authCallbacks.getCurrentUser
+    ? authCallbacks.getCurrentUser()
+    : getPersistedCurrentUser();
+  if (user?.access_token) {
+    config.headers = config.headers ?? {};
+    config.headers.Authorization = `Bearer ${user.access_token}`;
   }
   return config;
 });
+
+http.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const originalRequest = error.config;
+    const requestPath = String(originalRequest?.url || "").split("?")[0];
+    const isAuthEndpoint =
+      /(?:^|\/)auth\/(token|register|refresh|logout)\/?$/.test(requestPath);
+
+    if (
+      error.response?.status !== 401 ||
+      !originalRequest ||
+      originalRequest._retry ||
+      isAuthEndpoint
+    ) {
+      return Promise.reject(error);
+    }
+
+    originalRequest._retry = true;
+
+    if (refreshInProgress) {
+      return new Promise((resolve, reject) => {
+        refreshWaiters.push({ resolve, reject });
+      }).then((accessToken) => {
+        originalRequest.headers = originalRequest.headers ?? {};
+        originalRequest.headers.Authorization = `Bearer ${accessToken}`;
+        return http(originalRequest);
+      });
+    }
+
+    refreshInProgress = true;
+
+    let accessToken;
+    try {
+      const response = await http.post(
+        "/auth/refresh",
+        {},
+        { withCredentials: true },
+      );
+      accessToken = response.data?.access_token;
+      if (!accessToken)
+        throw new Error("Refresh response did not include access_token");
+    } catch (refreshError) {
+      refreshInProgress = false;
+      settleRefreshWaiters(refreshError);
+      try {
+        await authCallbacks.logout?.();
+      } finally {
+        if (
+          typeof window !== "undefined" &&
+          window.location.pathname !== "/login"
+        ) {
+          window.location.assign("/login");
+        }
+      }
+      return Promise.reject(refreshError);
+    }
+
+    authCallbacks.updateAccessToken?.(accessToken);
+    settleRefreshWaiters(null, accessToken);
+    refreshInProgress = false;
+
+    originalRequest.headers = originalRequest.headers ?? {};
+    originalRequest.headers.Authorization = `Bearer ${accessToken}`;
+    return http(originalRequest);
+  },
+);
 
 function buildQuery(params = {}) {
   const qp = new URLSearchParams();
@@ -114,12 +236,14 @@ export async function postReview(payload = {}, options = {}) {
   }
 }
 
-export async function fetchPhoneNumbers(options = {}) {
+export async function fetchCallbackContacts(options = {}) {
   try {
-    const res = await http.get(`/phone-numbers/`, { signal: options.signal });
+    const res = await http.get(`/callback-contacts/`, {
+      signal: options.signal,
+    });
     return res.data;
   } catch (e) {
-    normalizeAndThrow(e, "Failed to fetch phone numbers");
+    normalizeAndThrow(e, "Failed to fetch contact numbers");
   }
 }
 
@@ -217,10 +341,9 @@ export async function createOrder(payload = {}, params = {}) {
   }
 }
 
-export async function fetchOrders(params = {}) {
-  const qs = buildQuery(params);
+export async function fetchOrders() {
   try {
-    const res = await http.get(`/orders/${qs ? `?${qs}` : ""}`);
+    const res = await http.get("/orders/my");
     return res.data;
   } catch (e) {
     normalizeAndThrow(e, "Failed to fetch orders");
@@ -238,6 +361,11 @@ export async function loginUser(credentials) {
   } catch (e) {
     normalizeAndThrow(e, "Login failed");
   }
+}
+
+export async function logoutUserAPI() {
+  const res = await http.post("/auth/logout", {}, { withCredentials: true });
+  return res.data;
 }
 
 export async function registerUser(userData) {

@@ -4,7 +4,9 @@ import { motion } from "framer-motion";
 import "./Success.css";
 
 const Success = () => {
-  useEffect(() => window.scrollTo(0, 0), []);
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <section className="container section page-top-offset success-page">

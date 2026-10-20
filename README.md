@@ -1,16 +1,28 @@
-# React + Vite
+# BMW Catalog frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React + Vite storefront for browsing BMW models and managing a customer's cart, favorites, and orders.
 
-Currently, two official plugins are available:
+## Run locally
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Install dependencies with `npm ci`, copy `.env.development.example` to `.env.local`, then run `npm run dev`.
 
-## React Compiler
+The `.env.development.example` file contains both local and deployed API URLs. Uncomment only the backend you want to use. `.env.local` is ignored by Git, so your local selection stays on your computer.
 
-The React Compiler is currently not compatible with SWC. See [this issue](https://github.com/vitejs/vite-plugin-react/issues/428) for tracking the progress.
+## Deploy to Vercel
 
-## Expanding the ESLint configuration
+Import this repository as a Vite project. Use `npm run build` as the build command and `dist` as the output directory. Assign `auto-catalog.app` to the frontend project in Vercel. In Vercel Project Settings, set `VITE_API_URL=https://api.auto-catalog.app/api/v1` for **Production** and **Preview**.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+Vite embeds `VITE_API_URL` into the JavaScript during the build, so redeploy after changing it. Never put secrets in `VITE_*` variables; their values are public in the built frontend. The build stops with a clear error if this variable is missing.
+
+The backend API is served at `https://api.auto-catalog.app` and the frontend at `https://auto-catalog.app`. The backend must have a valid TLS certificate and accept HTTPS requests for the API URL above.
+
+`vercel.json` rewrites client-side routes to `index.html`, so links such as `/product/<id>` also work when opened directly or refreshed.
+
+The backend CORS configuration must allow `https://auto-catalog.app` (and any Vercel Preview origins used for testing). Because the frontend sends credentials for cookie-based auth, the backend must allow credentials and use compatible secure cookie settings.
+
+## Project commands
+
+- `npm run dev` starts the local Vite server.
+- `npm run lint` checks source files with ESLint.
+- `npm run build` creates the production bundle in `dist`.
+- `npm run preview` serves the production bundle locally.

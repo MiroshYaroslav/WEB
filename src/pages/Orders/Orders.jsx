@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { motion } from "framer-motion";
 
-import { fetchOrders } from "../../utils/api";
+import { fetchOrders, getApiAssetUrl } from "../../utils/api.js";
 import BackLink from "../../utils/BackButton.jsx";
 import Loader from "../../components/Loader/Loader.jsx";
 import "./Orders.css";
@@ -20,7 +20,7 @@ const Orders = () => {
   } = useQuery({
     queryKey: ["my_orders", currentUser?.id],
 
-    queryFn: () => fetchOrders({ user_id: currentUser?.id }),
+    queryFn: fetchOrders,
 
     enabled: !!currentUser,
   });
@@ -100,8 +100,8 @@ const Orders = () => {
 
               <div className="order-items">
                 {order.items.map((item) => {
-                  const imageSrc = item.product.image
-                    ? `http://localhost:8000${item.product.image}`
+                  const imageSrc = item.product.image_url
+                    ? getApiAssetUrl(item.product.image_url)
                     : "/image-car/placeholder.png";
                   return (
                     <div key={item.id} className="order-item-row">
