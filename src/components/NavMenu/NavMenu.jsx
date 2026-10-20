@@ -125,6 +125,16 @@ const NavMenu = () => {
           </button>
         </>
       )}
+      {!currentUser && (
+        <>
+          <Link to="/login" className="nav-link">
+            Log In
+          </Link>
+          <Link to="/register" className="nav-link">
+            Sign Up
+          </Link>
+        </>
+      )}
     </nav>
   );
 };

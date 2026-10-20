@@ -5,7 +5,7 @@ const ProtectedRoute = () => {
   const currentUser = useSelector((s) => s.auth.currentUser);
 
   if (!currentUser) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/register" replace />;
   }
 
   return <Outlet />;
