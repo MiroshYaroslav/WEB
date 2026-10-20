@@ -1,5 +1,5 @@
 import { lazy, Suspense, useEffect } from "react";
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { loadFavorites } from "./redux/actions";
 import { ToastContainer } from "react-toastify";
@@ -47,10 +47,10 @@ function App() {
               <Route path="/register" element={<RegisterPage />} />
             </Route>
 
-            <Route path="/" element={<Home />} />
-            <Route path="/catalog/:category" element={<Catalog />} />
-            <Route path="/product/:id" element={<ProductPage />} />
             <Route element={<ProtectedRoute />}>
+              <Route path="/" element={<Home />} />
+              <Route path="/catalog/:category" element={<Catalog />} />
+              <Route path="/product/:id" element={<ProductPage />} />
               <Route path="/favorites" element={<Favorites />} />
               <Route path="/cart" element={<Cart />} />
               <Route path="/checkout" element={<Checkout />} />
@@ -61,9 +61,7 @@ function App() {
             <Route
               path="*"
               element={
-                <h2 style={{ textAlign: "center", margin: "4rem" }}>
-                  Page not found
-                </h2>
+                <Navigate to="/" replace />
               }
             />
           </Routes>
