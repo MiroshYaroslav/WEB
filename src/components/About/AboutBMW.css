@@ -1,0 +1,34 @@
+.about-bmw {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding: 4rem 0;
+  background-color: #1a1a1a;
+  color: #fff;
+  margin-bottom: 5rem;
+}
+
+.about-inner {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 2rem;
+  width: 100%;
+}
+
+.about-text {
+  flex: 0 1 450px;
+  max-width: 500px;
+  text-align: left;
+}
+
+.about-text h2 {
+  font-size: 2.5rem;
+  margin-bottom: 1rem;
+}
+
+.about-text p {
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+}
