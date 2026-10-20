@@ -185,7 +185,7 @@ function normalizeAndThrow(e, fallback) {
 export async function fetchProducts(params = {}, options = {}) {
   const qs = buildQuery(params);
   try {
-    const res = await http.get(`/products${qs ? `?${qs}` : ""}`, {
+    const res = await http.get(`/products/${qs ? `?${qs}` : ""}`, {
       signal: options.signal,
     });
     return res.data;
@@ -205,7 +205,7 @@ export async function fetchProductById(id, options = {}) {
 
 export async function fetchCategories(options = {}) {
   try {
-    const res = await http.get(`/categories`, { signal: options.signal });
+    const res = await http.get(`/categories/`, { signal: options.signal });
     return res.data;
   } catch (e) {
     normalizeAndThrow(e, "Failed to fetch categories");
