@@ -15,6 +15,9 @@ const API_ORIGIN = API_BASE_URL.replace(/\/api\/v1\/?$/, "");
 export function getApiAssetUrl(path) {
   if (!path) return "";
   if (/^https?:\/\//i.test(path)) return path;
+  if (API_BASE_URL.startsWith("/")) {
+    return path.startsWith("/") ? path : `/${path}`;
+  }
   return `${API_ORIGIN}${path.startsWith("/") ? path : `/${path}`}`;
 }
 
@@ -215,10 +218,19 @@ export async function fetchCategories(options = {}) {
 export async function fetchReviews(productId = undefined, options = {}) {
   const qs = buildQuery({ product_id: productId });
   try {
-    const res = await http.get(`/reviews${qs ? `?${qs}` : ""}`, {
+    const res = await http.get(`/reviews/${qs ? `?${qs}` : ""}`, {
       signal: options.signal,
     });
-    return res.data;
+    const body = res.data;
+    // Accept plain arrays and common paginated/list response shapes.
+    const candidates = [body, body?.data];
+    for (const candidate of candidates) {
+      if (Array.isArray(candidate)) return candidate;
+      for (const key of ["results", "items", "reviews"]) {
+        if (Array.isArray(candidate?.[key])) return candidate[key];
+      }
+    }
+    return [];
   } catch (e) {
     normalizeAndThrow(e, "Failed to fetch reviews");
   }
@@ -250,7 +262,7 @@ export async function fetchCallbackContacts(options = {}) {
 export async function fetchFavorites(params = {}, options = {}) {
   const qs = buildQuery(params);
   try {
-    const res = await http.get(`/favorites${qs ? `?${qs}` : ""}`, {
+    const res = await http.get(`/favorites/${qs ? `?${qs}` : ""}`, {
       signal: options.signal,
     });
     return res.data;
@@ -285,7 +297,7 @@ export async function deleteFavorite(id, options = {}) {
 export async function fetchCartItems(params = {}, options = {}) {
   const qs = buildQuery(params);
   try {
-    const res = await http.get(`/cart${qs ? `?${qs}` : ""}`, {
+    const res = await http.get(`/cart/${qs ? `?${qs}` : ""}`, {
       signal: options.signal,
     });
     return res.data;
