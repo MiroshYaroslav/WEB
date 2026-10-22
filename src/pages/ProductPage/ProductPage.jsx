@@ -158,13 +158,23 @@ const ProductPage = () => {
     if (!form.username.trim()) return toast.error("Please enter your name.");
     setSubmitLoading(true);
     try {
-      await postReview({
+      const createdReview = await postReview({
         product_id: product.id,
         username: form.username.trim(),
         rating: Number(form.rating),
         comment: form.comment.trim() || null,
       });
-      queryClient.invalidateQueries({ queryKey: ["reviews", id] });
+      if (createdReview && typeof createdReview === "object") {
+        queryClient.setQueryData(["reviews", id], (current = []) => {
+          const list = Array.isArray(current) ? current : [];
+          const createdId = createdReview.id;
+          if (createdId != null && list.some((review) => review.id === createdId)) {
+            return list;
+          }
+          return [createdReview, ...list];
+        });
+      }
+      await queryClient.invalidateQueries({ queryKey: ["reviews", id] });
       setForm({ username: "", rating: "5", comment: "" });
       setSubmitSuccess("Review submitted.");
       setTimeout(() => setSubmitSuccess(""), 2500);

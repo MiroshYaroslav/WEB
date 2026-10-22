@@ -6,7 +6,7 @@ React + Vite storefront for browsing BMW models and managing a customer's cart, 
 
 Install dependencies with `npm ci`, copy `.env.development.example` to `.env.local`, then run `npm run dev`.
 
-The `.env.development.example` file contains both local and deployed API URLs. Uncomment only the backend you want to use. `.env.local` is ignored by Git, so your local selection stays on your computer.
+The local frontend sends API requests through Vite's development proxy, which forwards them to `https://api.auto-catalog.app` by default. To use a local backend, set `VITE_API_PROXY_TARGET=http://localhost:8000` in `.env.local`. `.env.local` is ignored by Git, so your local selection stays on your computer. For Vercel, keep setting the full API URL as described below.
 
 ## Deploy to Vercel
 
